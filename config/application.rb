@@ -60,5 +60,6 @@ module Hgbutton
     config.assets.version = '1.0'
 
     config.middleware.use Faye::RackAdapter, mount: '/faye'
+    config.threadsafe!
   end
 end
