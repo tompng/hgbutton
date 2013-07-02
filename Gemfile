@@ -38,4 +38,4 @@ gem 'jquery-rails'
 # gem 'debugger'
 
 gem 'faye'
-gem 'thin'
+gem 'puma'
