@@ -63,11 +63,15 @@ function ShaderObject(options){
 
 ShaderObject.prototype.use = function(params){
   GL.useProgram(this.program);
+  var texture_index = 0;
   for(var key in params){
     var uniform = this.uniforms[key]
     var value = params[key];
     if(value instanceof TextureObject){
-      GL.uniform1i(uniform, value.texture);
+      GL.uniform1i(uniform, texture_index);
+      GL.activeTexture(GL.TEXTURE_2D, GL['TEXTURE'+texture_index]);
+      GL.bindTexture(GL.TEXTURE_2D, value.texture);
+      texture_index++;
     }else if(window.J3DIMatrix4 && value instanceof J3DIMatrix4){
       value.setUniform(GL, uniform, true);
     }else if(value.length){

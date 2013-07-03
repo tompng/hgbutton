@@ -1,6 +1,6 @@
 //size width, height, color, format, wrap_s, wrap_t, wrap, filter, image, mipmap
 function TextureObject(options){
-  var width = options.size || opitons.width;
+  var width = options.size || options.width;
   var height = options.size || options.height;
   var color = options.color || GL.RGBA;
   var format = options.format || GL.UNSIGNED_BYTE;
@@ -9,8 +9,9 @@ function TextureObject(options){
   var mag_filter = options.filter || options.mag_filter;
   var min_filter = options.filter || options.min_filter;
   var texture = GL.createTexture();
+  var image = options.image || null;
   GL.bindTexture(GL.TEXTURE_2D, texture);
-  GL.texImage2D(GL.TEXTURE_2D, 0, color, width, height, 0, color, format, options.image);
+  GL.texImage2D(GL.TEXTURE_2D, 0, color, width, height, 0, color, format, image);
   GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, wrap_s);
   GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, wrap_t);
   if(options.mipmap){
@@ -25,9 +26,9 @@ function TextureObject(options){
   }
   if(options.mipmap)GL.generateMipmap(GL.TEXTURE_2D);
   GL.bindTexture(GL.TEXTURE_2D, null);
-  this.glTexture = texture;
+  this.texture = texture;
   this.width = width;
-  this.heigh = height;
+  this.height = height;
 }
 TextureObject.prototype.setLinear = function(flag){
   var filter = flag == false ? GL.LINEAR : GL.NEAREST;

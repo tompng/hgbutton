@@ -11,10 +11,11 @@ function init(){
 	var renderTarget = new RenderTarget({width: canvas.width, height: canvas.height});
 	FB.setTarget(renderTarget);
 	GL.clearColor(0,1,0,1)
-	GL.clear(GL.COLOR_BUFFER_BIT)
+	GL.clear(GL.COLOR_BUFFER_BIT);
 	GL.disable(GL.DEPTH_TEST);
 	LifeGame.load();
 	LifeGame.render(renderTarget);
+	setInterval(function(){LifeGame.render(renderTarget);},10)
 }
 onload=init
 </script>
