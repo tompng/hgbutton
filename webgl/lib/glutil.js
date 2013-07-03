@@ -1,5 +1,5 @@
 //size width, height, color, format, wrap_s, wrap_t, wrap, filter, image, mipmap
-function TextureObject(options)
+function TextureObject(options){
   var width = options.size || opitons.width;
   var height = options.size || options.height;
   var color = options.color || GL.RGBA;
@@ -25,7 +25,7 @@ function TextureObject(options)
   }
   if(options.mipmap)GL.generateMipmap(GL.TEXTURE_2D);
   GL.bindTexture(GL.TEXTURE_2D, null);
-  this.texture = texture;
+  this.glTexture = texture;
   this.width = width;
   this.heigh = height;
 }
@@ -40,23 +40,35 @@ TextureObject.prototype.setNearest = function(flag){
   GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, filter);
 }
 
-function ArrayBufferObject(dim, array32){
+function ArrayBufferObject(dim, array){
   this.dimension = dim;
   this.arrayBuffer = GL.createBuffer();
   GL.bindBuffer(GL.ARRAY_BUFFER, this.arrayBuffer);
-  GL.bufferData(GL.ARRAY_BUFFER, array32, GL.STATIC_DRAW);
+  if(!array instanceof Float32Array){
+    array = new Float32Array(array);
+  }
+  GL.bufferData(GL.ARRAY_BUFFER, array, GL.STATIC_DRAW);
 }
 
-function FrameBufferObject(fb){
-  this.framebuffer = fb;
+function FrameBufferObject(){
+  this.framebuffer = GL.createFramebuffer();
 }
-FrameBufferObject.prototype.setTarget = function(texture, options){
-  GL.bindFramebuffer(GL.FRAMEBUFFER, this.framebuffer);
-  GL.framebufferTexture2D(GL.FRAMEBUFFER, GL.COLOR_ATTACHMENT0, GL.TEXTURE_2D, texture.texture, 0);
-  options = options || {}
-  var x = options.x || 0;
-  var y = options.y || 0;
-  var width = options.width || texture.width;
-  var height = options.height || texture.height;
-  GL.viewport(x, y, width, height);
+FrameBufferObject.prototype.setTarget = function(renderTarget){
+  this.target = renderTarget;
+  if(!renderTarget.texture){
+    GL.bindFramebuffer(GL.FRAMEBUFFER, null);
+  }else{
+    GL.bindFramebuffer(GL.FRAMEBUFFER, this.framebuffer);
+    GL.framebufferTexture2D(GL.FRAMEBUFFER, GL.COLOR_ATTACHMENT0, GL.TEXTURE_2D, renderTarget.texture.texture, 0);
+  }
+  GL.viewport(renderTarget.x, renderTarget.y, renderTarget.width, renderTarget.height);
+}
+
+//texture, x, y, width, height
+function RenderTarget(options){
+  this.texture = options.texture;
+  this.x = options.x || 0;
+  this.y = options.y || 0;
+  this.width = options.width || options.texture.width;
+  this.height = options.height || options.texture.height;
 }

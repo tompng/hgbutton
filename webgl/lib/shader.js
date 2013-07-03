@@ -62,13 +62,13 @@ function ShaderObject(options){
 }
 
 ShaderObject.prototype.use = function(params){
-  GL.useProgram(program);
+  GL.useProgram(this.program);
   for(var key in params){
-    var uniformID = program.uniform[key]
+    var uniformID = this.uniforms[key]
     var value = params[key];
     if(value instanceof TextureObject){
       GL.uniform1i(uniformID, value.texture);
-    }else if(value instanceof J3DIMatrix4){
+    }else if(window.J3DIMatrix4 && value instanceof J3DIMatrix4){
       value.setUniform(GL, uniformID, true);
     }else if(value.length){
       switch(value.length){
@@ -80,16 +80,16 @@ ShaderObject.prototype.use = function(params){
       GL.uniform1f(uniformID, value);
     }
   }
+  return this;
 }
 
 ShaderObject.prototype.render = function(type, count, params){
-  var index = 0;
   for(var key in params){
     var abo = params[key];
     var attrib = this.attributes[key]
     GL.enableVertexAttribArray(attrib);
     GL.bindBuffer(GL.ARRAY_BUFFER, abo.arrayBuffer);
     GL.vertexAttribPointer(attrib, abo.dimension, GL.FLOAT, false, 0, 0);
-    GL.drawArrays(type, 0, count);
   }
+  GL.drawArrays(type, 0, count);
 }
