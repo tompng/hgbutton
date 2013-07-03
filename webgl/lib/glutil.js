@@ -44,10 +44,11 @@ function ArrayBufferObject(dim, array){
   this.dimension = dim;
   this.arrayBuffer = GL.createBuffer();
   GL.bindBuffer(GL.ARRAY_BUFFER, this.arrayBuffer);
-  if(!array instanceof Float32Array){
+  if(!(array instanceof Float32Array)){
     array = new Float32Array(array);
   }
   GL.bufferData(GL.ARRAY_BUFFER, array, GL.STATIC_DRAW);
+  GL.bindBuffer(GL.ARRAY_BUFFER, null);
 }
 
 function FrameBufferObject(){
