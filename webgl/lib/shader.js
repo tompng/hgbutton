@@ -1,94 +1,95 @@
 //vert, frag
-function ShaderObject(gl,options){
+function ShaderObject(options){
   var vfile = options.vert
   var ffile = options.frag
   function load(file){
-    var http=new XMLHttpRequest();
-    http.open("GET",file,false);
+    var http = new XMLHttpRequest();
+    http.open("GET", file, false);
     http.send(null);
     return http.responseText;
   }
-  function compile(type,input){
-    var code=input.charAt(0)=="#"?document.getElementById(input.substr(1)).text:load(input);
-    var shader=gl.createShader(type);
-    gl.shaderSource(shader,code);
-    gl.compileShader(shader);
-    if(gl.getShaderParameter(shader,gl.COMPILE_STATUS))return shader;
-    var log="Error compiling shader '"+input+"'\n"+gl.getShaderInfoLog(shader);
-    codelines=code.split("\n");
-    function itoa(i){var s="",n=codelines.length;while(n>1){s=(i%10)+s;i=Math.floor(i/10);n/=10;}return s;}
-    for(var i=0;i<codelines.length;i++)log+="\n"+itoa(i+1)+"  "+codelines[i];
-    gl.deleteShader(shader);
+  function compile(type, input){
+    var code = input.charAt(0) == "#" ? document.getElementById(input.substr(1)).text : load(input);
+    var shader = GL.createShader(type);
+    GL.shaderSource(shader, code);
+    GL.compileShader(shader);
+    if(GL.getShaderParameter(shader, GL.COMPILE_STATUS))return shader;
+    var log = "Error compiling shader '" + input + "'\n" + GL.getShaderInfoLog(shader);
+    codelines = code.split("\n");
+    var linestrlength = codelines.length.toString().length;
+    for(var i = 0; i < codelines.length; i++){
+      var linestr = ("0000" + (i + 1)).substr(-linestrlength, linestrlength)
+      log += linestr + "  " + codelines[i] + "\n";
+    }
+    GL.deleteShader(shader);
     console.log(log);
   }
-  var vshader=compile(gl.VERTEX_SHADER,vfile);
-  var fshader=compile(gl.FRAGMENT_SHADER,ffile);
-  if(!vshader||!fshader){
-    if(!vshader)console.log("failed loading vert: '"+vfile+"'");
-    if(!fshader)console.log("failed loading frag: '"+ffile+"'");
-    if(vshader)gl.deleteShader(vshader);
-    if(fshader)gl.deleteShader(fshader);
+  var vshader = compile(GL.VERTEX_SHADER, vfile);
+  var fshader = compile(GL.FRAGMENT_SHADER, ffile);
+  if(!vshader || !fshader){
+    if(!vshader)console.log("failed loading vert: '" + vfile + "'");
+    if(!fshader)console.log("failed loading frag: '" + ffile + "'");
+    if(vshader)GL.deleteShader(vshader);
+    if(fshader)GL.deleteShader(fshader);
     return null;
   }
-  var program=gl.createProgram();
-  gl.attachShader(program,vshader);
-  gl.attachShader(program,fshader);
-  gl.linkProgram(program);
-  if(!gl.getProgramParameter(program,gl.LINK_STATUS)){
-    console.log("Error in program linking '"+vfile+"' and '"+ffile+"'\n"+gl.getProgramInfoLog(program));
-    if(vshader)gl.deleteShader(vshader);
-    if(fshader)gl.deleteShader(fshader);
-    gl.deleteProgram(program);
+  var program = GL.createProgram();
+  GL.attachShader(program, vshader);
+  GL.attachShader(program, fshader);
+  GL.linkProgram(program);
+  if(!GL.getProgramParameter(program, GL.LINK_STATUS)){
+    console.log("Error in program linking '" + vfile + "' and '" + ffile + "'\n" + GL.getProgramInfoLog(program));
+    if(vshader)GL.deleteShader(vshader);
+    if(fshader)GL.deleteShader(fshader);
+    GL.deleteProgram(program);
     return null;
   }
-  var uniforms={};
-  var attributes={};
-  var ulen=gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);
-  var alen=gl.getProgramParameter(program,gl.ACTIVE_ATTRIBUTES);
-  for(var i=0;i<alen;i++){
-    var attr=gl.getActiveAttrib(program,i);
-    attributes[attr.name]=gl.getAttribLocation(program,attr.name);
+  var uniforms = {};
+  var attributes = {};
+  var ulen = GL.getProgramParameter(program, GL.ACTIVE_UNIFORMS);
+  var alen = GL.getProgramParameter(program, GL.ACTIVE_ATTRIBUTES);
+  for(var i = 0; i < alen; i++){
+    var attr = GL.getActiveAttrib(program, i);
+    attributes[attr.name] = GL.getAttribLocation(program, attr.name);
   }
-  for(var i=0;i<ulen;i++){
-    var uni=gl.getActiveUniform(program,i);
-    uniforms[uni.name]=gl.getUniformLocation(program,uni.name);
+  for(var i = 0; i < ulen; i++){
+    var uni = GL.getActiveUniform(program, i);
+    uniforms[uni.name] = GL.getUniformLocation(program, uni.name);
   }
-  this.gl=gl;
-  this.program=program;
-  this.uniforms=uniforms;
-  this.attributes=attributes;
+  this.program = program;
+  this.uniforms = uniforms;
+  this.attributes = attributes;
 }
 
-ShaderObject.prototype.use=function(params){
-  var gl=this.gl;
-  gl.useProgram(program);
+ShaderObject.prototype.use = function(params){
+  GL.useProgram(program);
   for(var key in params){
     var uniformID = program.uniform[key]
     var value = params[key];
     if(value instanceof TextureObject){
-      gl.uniform1i(uniformID,value.texture);
+      GL.uniform1i(uniformID, value.texture);
     }else if(value instanceof J3DIMatrix4){
-      value.setUniform(gl,uniformID,true);
+      value.setUniform(GL, uniformID, true);
     }else if(value.length){
       switch(value.length){
-        case 2:gl.uniform2fv(uniformID,value);break;
-        case 3:gl.uniform3fv(uniformID,value);break;
-        case 4:gl.uniform4fv(uniformID,value);break;
+        case 2:GL.uniform2fv(uniformID, value);break;
+        case 3:GL.uniform3fv(uniformID, value);break;
+        case 4:GL.uniform4fv(uniformID, value);break;
       }
     }else{
-      gl.uniform1f(uniformID,value);
+      GL.uniform1f(uniformID, value);
     }
   }
 }
 
-ShaderObject.prototype.render=function(type,count,params){
-  var gl=this.gl;
-  var index=0;
+ShaderObject.prototype.render = function(type, count, params){
+  var index = 0;
   for(var key in params){
-    var abo=params[key];
-    gl.enableVertexAttribArray(this.attributes[key]);
-    gl.bindBuffer(gl.ARRAY_BUFFER,abo.arrayBuffer);
-    gl.vertexAttribPointer(prog.attributes[key],abo.dimension,gl.FLOAT,false,0,0);
-    gl.drawArrays(type,0,count);
+    var abo = params[key];
+    var attrib = this.attributes[key]
+    GL.enableVertexAttribArray(attrib);
+    GL.bindBuffer(GL.ARRAY_BUFFER, abo.arrayBuffer);
+    GL.vertexAttribPointer(attrib, abo.dimension, GL.FLOAT, false, 0, 0);
+    GL.drawArrays(type, 0, count);
   }
 }
