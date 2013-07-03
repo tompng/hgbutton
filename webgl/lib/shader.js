@@ -1,5 +1,5 @@
-//vert, frat
-function createShaderProgram(gl,options){
+//vert, frag
+function ShaderObject(gl,options){
   var vfile = options.vert
   var ffile = options.frag
   function load(file){
@@ -41,17 +41,54 @@ function createShaderProgram(gl,options){
     gl.deleteProgram(program);
     return null;
   }
-  program.uniform={};
-  program.attribute={};
+  var uniforms={};
+  var attributes={};
   var ulen=gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);
   var alen=gl.getProgramParameter(program,gl.ACTIVE_ATTRIBUTES);
   for(var i=0;i<alen;i++){
     var attr=gl.getActiveAttrib(program,i);
-    program.attribute[attr.name]=gl.getAttribLocation(program,attr.name);
+    attributes[attr.name]=gl.getAttribLocation(program,attr.name);
   }
   for(var i=0;i<ulen;i++){
     var uni=gl.getActiveUniform(program,i);
-    program.uniform[uni.name]=gl.getUniformLocation(program,uni.name);
+    uniforms[uni.name]=gl.getUniformLocation(program,uni.name);
   }
-  return program;
+  this.gl=gl;
+  this.program=program;
+  this.uniforms=uniforms;
+  this.attributes=attributes;
+}
+
+ShaderObject.prototype.use=function(params){
+  var gl=this.gl;
+  gl.useProgram(program);
+  for(var key in params){
+    var uniformID = program.uniform[key]
+    var value = params[key];
+    if(value instanceof TextureObject){
+      gl.uniform1i(uniformID,value.texture);
+    }else if(value instanceof J3DIMatrix4){
+      value.setUniform(gl,uniformID,true);
+    }else if(value.length){
+      switch(value.length){
+        case 2:gl.uniform2fv(uniformID,value);break;
+        case 3:gl.uniform3fv(uniformID,value);break;
+        case 4:gl.uniform4fv(uniformID,value);break;
+      }
+    }else{
+      gl.uniform1f(uniformID,value);
+    }
+  }
+}
+
+ShaderObject.prototype.render=function(type,count,params){
+  var gl=this.gl;
+  var index=0;
+  for(var key in params){
+    var abo=params[key];
+    gl.enableVertexAttribArray(this.attributes[key]);
+    gl.bindBuffer(gl.ARRAY_BUFFER,abo.arrayBuffer);
+    gl.vertexAttribPointer(prog.attributes[key],abo.dimension,gl.FLOAT,false,0,0);
+    gl.drawArrays(type,0,count);
+  }
 }
