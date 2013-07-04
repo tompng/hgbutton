@@ -23,6 +23,12 @@ var LifeGame = function(){
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 }
 
+LifeGame.prototype.flipRenderTarget = function() {
+  var target_tmp = this.target0;
+  this.target0   = this.target1;
+  this.target1   = target_tmp;
+};
+
 LifeGame.prototype.render = function(target){
   GL.framebuffer.setRenderTarget(this.target1);
   this.calcShader.use({
@@ -47,9 +53,7 @@ LifeGame.prototype.render = function(target){
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 }
 
-  var target_tmp = this.target0;
-  this.target0   = this.target1;
-  this.target1   = target_tmp;
+  this.flipRenderTarget();
 
   GL.framebuffer.setRenderTarget(target);
   this.renderShader.use({
