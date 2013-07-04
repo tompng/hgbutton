@@ -14,6 +14,7 @@ var LifeGame = function(){
   this.target0 = new RenderTarget({texture: texture0})
   this.target1 = new RenderTarget({texture: texture1})
   this.quad    = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
+  this.a       = 0;
 
   // 初期化時にセルを作ってまっくろじゃなくする
   GL.framebuffer.setRenderTarget(this.target0);
@@ -21,7 +22,7 @@ var LifeGame = function(){
     rand: Math.random()
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 }
-var a=0;
+
 LifeGame.prototype.render = function(target){
   GL.framebuffer.setRenderTarget(this.target1);
   this.calcShader.use({
@@ -31,17 +32,17 @@ LifeGame.prototype.render = function(target){
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 
 {
-  a++;
+  this.a++;
   this.messageShader.use({
-    rect:    [-1, 1 - (a * 0.01) % 3, 0.7, 1],
+    rect:    [-1, 1 - (this.a * 0.01) % 3, 0.7, 1],
     texture: this.messageTextures[0]
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
   this.messageShader.use({
-    rect:    [-1 + 0.65, 1 - (a * 0.012) % 3, 0.7, 1],
+    rect:    [-1 + 0.65, 1 - (this.a * 0.012) % 3, 0.7, 1],
     texture: this.messageTextures[1]
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
   this.messageShader.use({
-    rect:    [-1 + 0.65 * 2, 1 - (a * 0.013) % 3, 0.7, 1],
+    rect:    [-1 + 0.65 * 2, 1 - (this.a * 0.013) % 3, 0.7, 1],
     texture: this.messageTextures[2]
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 }
