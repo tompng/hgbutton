@@ -4,7 +4,7 @@ var LifeGame = function(){
   this.noiseShader   = new ShaderObject({ vert: 'vertex.vert', frag: 'noise.frag' });
   this.renderShader  = new ShaderObject({ vert: 'vertex.vert', frag: 'render.frag' });
   this.messageShader = new ShaderObject({ vert: 'image.vert',  frag: 'image.frag' });
-  this.messageTextures = {
+  this.textures = {
     い: new TextureObject({ size:128, image: createCharImage('い', 128) }),
     ね: new TextureObject({ size:128, image: createCharImage('ね', 128) })
   };
@@ -39,17 +39,17 @@ LifeGame.prototype.render = function(outputTarget){
   this.a++;
   this.messageShader.use({
     rect:    [-1, 1 - (this.a * 0.01) % 3, 0.7, 1],
-    texture: this.messageTextures.い
+    texture: this.textures.い
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 
   this.messageShader.use({
     rect:    [-1 + 0.65, 1 - (this.a * 0.012) % 3, 0.7, 1],
-    texture: this.messageTextures.い
+    texture: this.textures.い
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 
   this.messageShader.use({
     rect:    [-1 + 0.65 * 2, 1 - (this.a * 0.013) % 3, 0.7, 1],
-    texture: this.messageTextures.ね
+    texture: this.textures.ね
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 
   GL.framebuffer.setRenderTarget(outputTarget);
