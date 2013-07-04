@@ -2,7 +2,7 @@ precision mediump float;
 varying vec2 texcoord;
 uniform float rand;
 void main(void){
-  vec2 p=4.*texcoord-vec2(2,2);
+  vec2 p=4.*texcoord;
   gl_FragColor.rgb=vec3(1,1,1)*(sin(1234.*sin(
     (9987.+1923.*rand)*p.x
     +(8817.+1557.*rand)*p.y
