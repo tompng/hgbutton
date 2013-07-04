@@ -5,9 +5,9 @@ var LifeGame = function(){
   this.renderShader  = new ShaderObject({ vert: 'vertex.vert', frag: 'render.frag' });
   this.messageShader = new ShaderObject({ vert: 'image.vert',  frag: 'image.frag' });
   this.messageTextures = [
-    new TextureObject({ size:128, image:createCharImage('い', 128) }),
-    new TextureObject({ size:128, image:createCharImage('い', 128) }),
-    new TextureObject({ size:128, image:createCharImage('ね', 128) })
+    new TextureObject({ size:128, image: createCharImage('い', 128) }),
+    new TextureObject({ size:128, image: createCharImage('い', 128) }),
+    new TextureObject({ size:128, image: createCharImage('ね', 128) })
   ];
   var texture0 = new TextureObject({size: this.size, filter:GL.NEAREST});
   var texture1 = new TextureObject({size: this.size, filter:GL.NEAREST});
