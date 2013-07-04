@@ -8,10 +8,8 @@ var LifeGame = function(){
     い: new TextureObject({ size:128, image: createCharImage('い', 128) }),
     ね: new TextureObject({ size:128, image: createCharImage('ね', 128) })
   };
-  var texture0   = new TextureObject({size: this.size, filter:GL.NEAREST});
-  var texture1   = new TextureObject({size: this.size, filter:GL.NEAREST});
-  this.oldTarget = new RenderTarget({texture: texture0})
-  this.target    = new RenderTarget({texture: texture1})
+  this.oldTarget = this.createRenderTarget();
+  this.target    = this.createRenderTarget();
   this.quad      = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
   this.a         = 0;
 
@@ -20,6 +18,11 @@ var LifeGame = function(){
   this.noiseShader.use({
     rand: Math.random()
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
+}
+
+LifeGame.prototype.createRenderTarget = function() {
+  var texture = new TextureObject({size: this.size, filter: GL.NEAREST});
+  return new RenderTarget({texture: texture})
 }
 
 LifeGame.prototype.flipRenderTarget = function() {
