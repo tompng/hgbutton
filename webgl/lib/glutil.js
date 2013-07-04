@@ -55,7 +55,7 @@ function ArrayBufferObject(dim, array){
 function FrameBufferObject(){
   this.framebuffer = GL.createFramebuffer();
 }
-FrameBufferObject.prototype.setTarget = function(renderTarget){
+FrameBufferObject.prototype.setRenderTarget = function(renderTarget){
   this.target = renderTarget;
   if(!renderTarget.texture){
     GL.bindFramebuffer(GL.FRAMEBUFFER, null);

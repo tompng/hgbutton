@@ -7,9 +7,9 @@ var FB;
 function init(){
 	var canvas=document.getElementById("webglcanvas");
 	GL=canvas.getContext("experimental-webgl");
-	FB=new FrameBufferObject();
+	GL.framebuffer=new FrameBufferObject();
 	var renderTarget = new RenderTarget({width: canvas.width, height: canvas.height});
-	FB.setTarget(renderTarget);
+	GL.framebuffer.setRenderTarget(renderTarget);
 	GL.clearColor(0,1,0,1)
 	GL.clear(GL.COLOR_BUFFER_BIT);
 	GL.disable(GL.DEPTH_TEST);
