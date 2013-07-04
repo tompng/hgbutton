@@ -53,10 +53,10 @@ LifeGame.prototype.render = function(target){
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 }
 
-  this.flipRenderTarget();
-
   GL.framebuffer.setRenderTarget(target);
   this.renderShader.use({
     texture: this.target1.texture,
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
+
+  this.flipRenderTarget();
 }
