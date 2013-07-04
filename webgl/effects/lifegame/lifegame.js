@@ -9,7 +9,7 @@ var LifeGame = function(){
     ね: new TextureObject({ size:128, image: createCharImage('ね', 128) })
   };
   this.oldTarget = this.createRenderTarget();
-  this.target    = this.createRenderTarget();
+  this.newTarget = this.createRenderTarget();
   this.quad      = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
   this.a         = 0;
 
@@ -27,12 +27,12 @@ LifeGame.prototype.createRenderTarget = function() {
 
 LifeGame.prototype.flipRenderTarget = function() {
   var target_tmp = this.oldTarget;
-  this.oldTarget = this.target;
-  this.target    = target_tmp;
+  this.oldTarget = this.newTarget;
+  this.newTarget = target_tmp;
 };
 
 LifeGame.prototype.render = function(outputTarget){
-  GL.framebuffer.setRenderTarget(this.target);
+  GL.framebuffer.setRenderTarget(this.newTarget);
   this.calcShader.use({
     dx:      [1 / this.size, 0],
     dy:      [0, 1 / this.size],
@@ -57,7 +57,7 @@ LifeGame.prototype.render = function(outputTarget){
 
   GL.framebuffer.setRenderTarget(outputTarget);
   this.renderShader.use({
-    texture: this.target.texture,
+    texture: this.newTarget.texture,
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 
   this.flipRenderTarget();
