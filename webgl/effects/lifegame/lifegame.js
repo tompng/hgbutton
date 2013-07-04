@@ -37,7 +37,6 @@ LifeGame.prototype.render = function(outputTarget){
     texture: this.oldTarget.texture
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 
-{
   this.a++;
   this.messageShader.use({
     rect:    [-1, 1 - (this.a * 0.01) % 3, 0.7, 1],
@@ -51,7 +50,6 @@ LifeGame.prototype.render = function(outputTarget){
     rect:    [-1 + 0.65 * 2, 1 - (this.a * 0.013) % 3, 0.7, 1],
     texture: this.messageTextures[2]
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
-}
 
   GL.framebuffer.setRenderTarget(outputTarget);
   this.renderShader.use({
