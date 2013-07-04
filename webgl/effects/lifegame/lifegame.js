@@ -29,7 +29,7 @@ LifeGame.prototype.flipRenderTarget = function() {
   this.target   = target_tmp;
 };
 
-LifeGame.prototype.render = function(target){
+LifeGame.prototype.render = function(outputTarget){
   GL.framebuffer.setRenderTarget(this.target);
   this.calcShader.use({
     dx:      [1 / this.size, 0],
@@ -53,7 +53,7 @@ LifeGame.prototype.render = function(target){
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 }
 
-  GL.framebuffer.setRenderTarget(target);
+  GL.framebuffer.setRenderTarget(outputTarget);
   this.renderShader.use({
     texture: this.target.texture,
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
