@@ -8,12 +8,12 @@ var LifeGame = function(){
     い: new TextureObject({ size:128, image: createCharImage('い', 128) }),
     ね: new TextureObject({ size:128, image: createCharImage('ね', 128) })
   };
-  var texture0 = new TextureObject({size: this.size, filter:GL.NEAREST});
-  var texture1 = new TextureObject({size: this.size, filter:GL.NEAREST});
+  var texture0   = new TextureObject({size: this.size, filter:GL.NEAREST});
+  var texture1   = new TextureObject({size: this.size, filter:GL.NEAREST});
   this.oldTarget = new RenderTarget({texture: texture0})
-  this.target = new RenderTarget({texture: texture1})
-  this.quad    = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
-  this.a       = 0;
+  this.target    = new RenderTarget({texture: texture1})
+  this.quad      = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
+  this.a         = 0;
 
   // 初期化時にセルを作ってまっくろじゃなくする
   GL.framebuffer.setRenderTarget(this.oldTarget);
@@ -24,8 +24,8 @@ var LifeGame = function(){
 
 LifeGame.prototype.flipRenderTarget = function() {
   var target_tmp = this.oldTarget;
-  this.oldTarget   = this.target;
-  this.target   = target_tmp;
+  this.oldTarget = this.target;
+  this.target    = target_tmp;
 };
 
 LifeGame.prototype.render = function(outputTarget){
