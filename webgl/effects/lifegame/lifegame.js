@@ -11,30 +11,30 @@ var LifeGame = function(){
   ];
   var texture0 = new TextureObject({size: this.size, filter:GL.NEAREST});
   var texture1 = new TextureObject({size: this.size, filter:GL.NEAREST});
-  this.target0 = new RenderTarget({texture: texture0})
-  this.target1 = new RenderTarget({texture: texture1})
+  this.oldTarget = new RenderTarget({texture: texture0})
+  this.target = new RenderTarget({texture: texture1})
   this.quad    = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
   this.a       = 0;
 
   // 初期化時にセルを作ってまっくろじゃなくする
-  GL.framebuffer.setRenderTarget(this.target0);
+  GL.framebuffer.setRenderTarget(this.oldTarget);
   this.noiseShader.use({
     rand: Math.random()
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 }
 
 LifeGame.prototype.flipRenderTarget = function() {
-  var target_tmp = this.target0;
-  this.target0   = this.target1;
-  this.target1   = target_tmp;
+  var target_tmp = this.oldTarget;
+  this.oldTarget   = this.target;
+  this.target   = target_tmp;
 };
 
 LifeGame.prototype.render = function(target){
-  GL.framebuffer.setRenderTarget(this.target1);
+  GL.framebuffer.setRenderTarget(this.target);
   this.calcShader.use({
     dx:      [1 / this.size, 0],
     dy:      [0, 1 / this.size],
-    texture: this.target0.texture
+    texture: this.oldTarget.texture
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 
 {
@@ -55,7 +55,7 @@ LifeGame.prototype.render = function(target){
 
   GL.framebuffer.setRenderTarget(target);
   this.renderShader.use({
-    texture: this.target1.texture,
+    texture: this.target.texture,
   }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 
   this.flipRenderTarget();
