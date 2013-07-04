@@ -15,10 +15,11 @@ var LifeGame = function(){
   this.target1 = new RenderTarget({texture: texture1})
   this.quad    = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
 
-   // GL.framebuffer.setRenderTarget(this.target0);
-   // this.noiseShader.use({
-   //   rand: Math.random()
-   // }).render(GL.TRIANGLE_FAN, 4, {vertex: this.quad});
+  // 初期化時にセルを作ってまっくろじゃなくする
+  GL.framebuffer.setRenderTarget(this.target0);
+  this.noiseShader.use({
+    rand: Math.random()
+  }).render(GL.TRIANGLE_FAN, 4, { vertex: this.quad });
 }
 var a=0;
 LifeGame.prototype.render = function(target){
