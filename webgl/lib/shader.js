@@ -87,13 +87,13 @@ ShaderObject.prototype.use = function(params){
   return this;
 }
 
-ShaderObject.prototype.render = function(type, count, params){
-  for(var key in params){
-    var abo = params[key];
-    var attrib = this.attributes[key]
-    GL.enableVertexAttribArray(attrib);
+ShaderObject.prototype.render = function(geometry){
+  for(var key in geometry.attributes){
+    var abo = geometry.attributes[key];
+    var attr = this.attributes[key]
+    GL.enableVertexAttribArray(attr);
     GL.bindBuffer(GL.ARRAY_BUFFER, abo.arrayBuffer);
-    GL.vertexAttribPointer(attrib, abo.dimension, GL.FLOAT, false, 0, 0);
+    GL.vertexAttribPointer(attr, abo.dimension, GL.FLOAT, false, 0, 0);
   }
-  GL.drawArrays(type, 0, count);
+  GL.drawArrays(geometry.type, 0, geometry.count);
 }

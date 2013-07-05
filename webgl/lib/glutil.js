@@ -84,3 +84,9 @@ function RenderTarget(options){
   this.width = options.width || options.texture.width;
   this.height = options.height || options.texture.height;
 }
+
+function Geometry(type, count, attributes){
+  this.type = type;
+  this.count = count;
+  this.attributes = attributes;
+}
