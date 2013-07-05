@@ -37,21 +37,22 @@ BlurEffect.prototype.render = function(outputTarget){
   }).render(this.quad);
 	GL.blendFunc(GL.ONE,GL.ONE);
 	this.a++;
-  this.messageShader.use({
-    rect:    [-1, 1 - (this.a * 0.01) % 3, 0.7, 1],
-    texture: this.textures.i
-  }).render(this.quad);
+  if(this.a%30==0){
+    this.messageShader.use({
+      rect:    [-1, 1 - (this.a * 0.01) % 3, 0.7, 1],
+      texture: this.textures.i
+    }).render(this.quad);
 
-  this.messageShader.use({
-    rect:    [-1 + 0.65, 1 - (this.a * 0.012) % 3, 0.7, 1],
-    texture: this.textures.i
-  }).render(this.quad);
+    this.messageShader.use({
+      rect:    [-1 + 0.65, 1 - (this.a * 0.012) % 3, 0.7, 1],
+      texture: this.textures.i
+    }).render(this.quad);
 
-  this.messageShader.use({
-    rect:    [-1 + 0.65 * 2, 1 - (this.a * 0.013) % 3, 0.7, 1],
-    texture: this.textures.ne
-  }).render(this.quad);
-
+    this.messageShader.use({
+      rect:    [-1 + 0.65 * 2, 1 - (this.a * 0.013) % 3, 0.7, 1],
+      texture: this.textures.ne
+    }).render(this.quad);
+  }
   GL.framebuffer.setRenderTarget(outputTarget);
   this.renderShader.use({
     texture: this.newTarget.texture,
