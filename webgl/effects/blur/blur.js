@@ -24,7 +24,7 @@ BlurEffect.prototype.flipRenderTarget = function() {
   this.oldTarget = this.newTarget;
   this.newTarget = target_tmp;
 };
-var t=0;
+
 BlurEffect.prototype.render = function(outputTarget){
   GL.framebuffer.setRenderTarget(this.newTarget);
   GL.enable(GL.BLEND);
@@ -37,7 +37,7 @@ BlurEffect.prototype.render = function(outputTarget){
   }).render(this.quad);
 	GL.blendFunc(GL.ONE,GL.ONE);
 	this.a++;
-  if(this.a%30==0){
+  if(this.a%60==0){
     this.messageShader.use({
       rect:    [-1, 1 - (this.a * 0.01) % 3, 0.7, 1],
       texture: this.textures.i
