@@ -69,7 +69,7 @@ ShaderObject.prototype.use = function(params){
     var value = params[key];
     if(value instanceof TextureObject){
       GL.uniform1i(uniform, texture_index);
-      GL.activeTexture(GL.TEXTURE_2D, GL['TEXTURE'+texture_index]);
+      GL.activeTexture(GL['TEXTURE'+texture_index]);
       GL.bindTexture(GL.TEXTURE_2D, value.texture);
       texture_index++;
     }else if(window.J3DIMatrix4 && value instanceof J3DIMatrix4){
