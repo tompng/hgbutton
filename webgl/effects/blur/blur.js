@@ -54,6 +54,7 @@ BlurEffect.prototype.render = function(outputTarget){
     }).render(this.quad);
   }
   GL.framebuffer.setRenderTarget(outputTarget);
+  GL.blendFunc(GL.ONE,GL.ZERO);
   this.renderShader.use({
     texture: this.newTarget.texture,
   }).render(this.quad);
