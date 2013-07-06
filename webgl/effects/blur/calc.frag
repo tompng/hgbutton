@@ -15,5 +15,5 @@ void main(void){
 			 texture2D(texture,texcoord+v3).b
 	 );
 			 
-	gl_FragColor=vec4(color-vec3(1,1,1)/256.,1);
+	gl_FragColor=vec4(color-2.*vec3(1,1,1)/256.,1);
 }

@@ -5,8 +5,9 @@ var LifeGame = function(){
   this.renderShader  = new ShaderObject({ vert: 'vertex.vert', frag: 'render.frag' });
   this.messageShader = new ShaderObject({ vert: 'image.vert',  frag: 'image.frag' });
   this.textures = {
-    い: new TextureObject({ size:128, image: createCharImage('い', 128) }),
-    ね: new TextureObject({ size:128, image: createCharImage('ね', 128) })
+    は: new TextureObject({ image: createCharImage('は', 128) }),
+    ご: new TextureObject({ image: createCharImage('ご', 128) }),
+    ー: new TextureObject({ image: createCharImage('ー', 128) })
   };
   this.oldTarget = this.createRenderTarget();
   this.newTarget = this.createRenderTarget();
@@ -43,17 +44,17 @@ LifeGame.prototype.render = function(outputTarget){
   this.a++;
   this.messageShader.use({
     rect:    [-1, 1 - (this.a * 0.01) % 3, 0.7, 1],
-    texture: this.textures.い
+    texture: this.textures.は
   }).render(this.quad);
 
   this.messageShader.use({
     rect:    [-1 + 0.65, 1 - (this.a * 0.012) % 3, 0.7, 1],
-    texture: this.textures.い
+    texture: this.textures.ご
   }).render(this.quad);
 
   this.messageShader.use({
     rect:    [-1 + 0.65 * 2, 1 - (this.a * 0.013) % 3, 0.7, 1],
-    texture: this.textures.ね
+    texture: this.textures.ー
   }).render(this.quad);
 
   GL.framebuffer.setRenderTarget(outputTarget);

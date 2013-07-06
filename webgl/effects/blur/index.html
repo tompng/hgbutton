@@ -15,7 +15,7 @@ function init(){
 	GL.clearColor(0,1,0,1)
 	GL.clear(GL.COLOR_BUFFER_BIT);
 	GL.disable(GL.DEPTH_TEST);
-	effect = new BlurEffect();
+	var effect = new BlurEffect();
 	effect.render(renderTarget);
 	setInterval(function(){effect.render(renderTarget);},10)
 }

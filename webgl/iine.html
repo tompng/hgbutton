@@ -1,4 +1,5 @@
 <meta charset='utf-8'>
+<script src='lib/text2img.js'></script>
 <script>
 IINE={};
 
@@ -14,35 +15,18 @@ function setBG(){
   document.body.style.background='url('+canvas.toDataURL()+')'
 }
 
-function createCharImage(text,size,font){
-  var canvas=document.createElement("canvas");
-  canvas.width=canvas.height=size;
-  var g=canvas.getContext('2d');
-  g.font=size*7/8+'px '+font
-  g.textAlign='center'
-  g.textBaseline='middle'
-  g.fillStyle='white';
-  g.strokeStyle='black';
-  g.lineWidth=size/8
-  g.strokeText(text,size/2,size/2);
-  g.fillText(text,size/2,size/2);
+function addCharImage(text,size,font){
   var img=new Image();
-  img.src=canvas.toDataURL();
+  img.src=createCharImage(text,size).toDataURL();
   document.body.appendChild(img);
 }
 onload=function(){
   setBG();
-  createCharImage('い',512,'DFMaruGothic-SB-MP-RKSJ-H')
-  createCharImage('い',512,'DFMaruGothic-SB-MP-RKSJ-H')
-  createCharImage('ね',512,'DFMaruGothic-SB-MP-RKSJ-H')
-  createCharImage('い',512,'DFKanTeiRyu-XB-MP-RKSJ-H')
-  createCharImage('い',512,'DFKanTeiRyu-XB-MP-RKSJ-H')
-  createCharImage('ね',512,'DFKanTeiRyu-XB-MP-RKSJ-H')
-  createCharImage('は',512,'DFMaruGothic-SB-MP-RKSJ-H')
-  createCharImage('ご',512,'DFMaruGothic-SB-MP-RKSJ-H')
-  createCharImage('ー',512,'DFMaruGothic-SB-MP-RKSJ-H')
-  createCharImage('は',512,'DFKanTeiRyu-XB-MP-RKSJ-H')
-  createCharImage('ご',512,'DFKanTeiRyu-XB-MP-RKSJ-H')
-  createCharImage('ー',512,'DFKanTeiRyu-XB-MP-RKSJ-H')
+  addCharImage('い',512)
+  addCharImage('い',512)
+  addCharImage('ね',512)
+  addCharImage('は',512)
+  addCharImage('ご',512)
+  addCharImage('ー',512)
 }
 </script>

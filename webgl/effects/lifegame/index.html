@@ -15,9 +15,9 @@ function init(){
 	GL.clearColor(0,1,0,1)
 	GL.clear(GL.COLOR_BUFFER_BIT);
 	GL.disable(GL.DEPTH_TEST);
-	lifegame = new LifeGame();
-	lifegame.render(renderTarget);
-	setInterval(function(){lifegame.render(renderTarget);},10)
+	var effect = new LifeGame();
+	effect.render(renderTarget);
+	setInterval(function(){effect.render(renderTarget);},10)
 }
 onload=init
 </script>

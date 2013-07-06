@@ -4,8 +4,9 @@ var BlurEffect = function(){
   this.renderShader  = new ShaderObject({ vert: 'vertex.vert', frag: 'render.frag' });
   this.messageShader = new ShaderObject({ vert: 'image.vert',  frag: 'image.frag' });
   this.textures = {
-    i: new TextureObject({ size:128, image: createCharImage('い', 128) }),
-    ne: new TextureObject({ size:128, image: createCharImage('ね', 128) })
+    は: new TextureObject({ image: createCharImage('は', 128) }),
+    ご: new TextureObject({ image: createCharImage('ご', 128) }),
+    ー: new TextureObject({ image: createCharImage('ー', 128) })
   };
   this.oldTarget = this.createRenderTarget();
   this.newTarget = this.createRenderTarget();
@@ -37,20 +38,35 @@ BlurEffect.prototype.render = function(outputTarget){
   }).render(this.quad);
 	GL.blendFunc(GL.ONE,GL.ONE);
 	this.a++;
-  if(this.a%60==0){
+  if(this.a%12==0){
+    this.messageShader.use({
+      rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.35, 0.5],
+      texture: this.textures.は
+    }).render(this.quad);
+    this.messageShader.use({
+      rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.35, 0.5],
+      texture: this.textures.ご
+    }).render(this.quad);
+    this.messageShader.use({
+      rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.35, 0.5],
+      texture: this.textures.ー
+    }).render(this.quad);
+
+  }
+  if(this.a%60==0&&false){
     this.messageShader.use({
       rect:    [-1, 1 - (this.a * 0.01) % 3, 0.7, 1],
-      texture: this.textures.i
+      texture: this.textures.は
     }).render(this.quad);
 
     this.messageShader.use({
       rect:    [-1 + 0.65, 1 - (this.a * 0.012) % 3, 0.7, 1],
-      texture: this.textures.i
+      texture: this.textures.ご
     }).render(this.quad);
 
     this.messageShader.use({
       rect:    [-1 + 0.65 * 2, 1 - (this.a * 0.013) % 3, 0.7, 1],
-      texture: this.textures.ne
+      texture: this.textures.ー
     }).render(this.quad);
   }
   GL.framebuffer.setRenderTarget(outputTarget);

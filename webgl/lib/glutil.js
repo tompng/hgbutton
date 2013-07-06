@@ -1,7 +1,7 @@
 //size width, height, color, format, wrap_s, wrap_t, wrap, filter, image, mipmap
 function TextureObject(options){
-  var width = options.size || options.width;
-  var height = options.size || options.height;
+  var width = options.size || options.width || (options.image && options.image.width);
+  var height = options.size || options.height || (options.image && options.image.height);
   var color = options.color || GL.RGBA;
   var format = options.format || GL.UNSIGNED_BYTE;
   var wrap_s = options.wrap_s || options.wrap || GL.REPEAT;
@@ -11,7 +11,6 @@ function TextureObject(options){
   var texture = GL.createTexture();
   var image = options.image || null;
   GL.bindTexture(GL.TEXTURE_2D, texture);
-  if(!image)GL.texImage2D(GL.TEXTURE_2D, 0, color, width, height, 0, color, format, null);
   GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, wrap_s);
   GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, wrap_t);
   if(options.mipmap){
@@ -25,15 +24,17 @@ function TextureObject(options){
     GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, min_filter || GL.LINEAR);
   }
   if(image){
-    if(image.complete){
-      GL.texImage2D(GL.TEXTURE_2D, 0, color, color, GL.UNSIGNED_BYTE, image);
-      if(options.mipmap)GL.generateMipmap(GL.TEXTURE_2D);
-    }else{
+    if(image.complete == false){
       image.onload=function(){
         GL.texImage2D(GL.TEXTURE_2D, 0, color, color, GL.UNSIGNED_BYTE, image);
         if(options.mipmap)GL.generateMipmap(GL.TEXTURE_2D);
       }
+    }else{
+      GL.texImage2D(GL.TEXTURE_2D, 0, color, color, GL.UNSIGNED_BYTE, image);
+      if(options.mipmap)GL.generateMipmap(GL.TEXTURE_2D);
     }
+  }else{
+    GL.texImage2D(GL.TEXTURE_2D, 0, color, width, height, 0, color, format, null);
   }
   GL.bindTexture(GL.TEXTURE_2D, null);
   this.texture = texture;
