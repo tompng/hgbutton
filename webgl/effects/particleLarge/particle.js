@@ -64,7 +64,7 @@ ParticleLarge.prototype.render = function(){
     this.shader.use({
       modelview: modelview,
       projection: this.projection,
-      size: 0.03,
+      size: 0.02,
       time: Math.cos(this.time)
     }).render(this.geoms[i]);
   }
