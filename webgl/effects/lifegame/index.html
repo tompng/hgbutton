@@ -2,23 +2,7 @@
 <script src="../../lib/glutil.js"></script>
 <script src="../../lib/shader.js"></script>
 <script src="../../lib/text2img.js"></script>
+<script src="../../lib/demo.js"></script>
 <script src="lifegame.js" charset="utf-8"></script>
-<script>
-var GL;
-var FB;
-function init(){
-	var canvas=document.getElementById("webglcanvas");
-	GL=canvas.getContext("experimental-webgl");
-	GL.framebuffer=new FrameBufferObject();
-	var renderTarget = new RenderTarget({width: canvas.width, height: canvas.height});
-	GL.framebuffer.setRenderTarget(renderTarget);
-	GL.clearColor(0,1,0,1)
-	GL.clear(GL.COLOR_BUFFER_BIT);
-	GL.disable(GL.DEPTH_TEST);
-	var effect = new LifeGame();
-	effect.render(renderTarget);
-	setInterval(function(){effect.render(renderTarget);},10)
-}
-onload=init
-</script>
-<canvas id=webglcanvas width=600 height=400>
+<script>onload=function(){start(LifeGame)}</script>
+<canvas id=webglcanvas width=512 height=512></canvas>

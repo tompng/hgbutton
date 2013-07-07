@@ -26,7 +26,7 @@ BlurEffect.prototype.flipRenderTarget = function() {
   this.newTarget = target_tmp;
 };
 
-BlurEffect.prototype.render = function(outputTarget){
+BlurEffect.prototype.render = function(outputTarget,count){
   GL.framebuffer.setRenderTarget(this.newTarget);
   GL.enable(GL.BLEND);
 	GL.blendFunc(GL.ONE,GL.ZERO);
@@ -38,34 +38,17 @@ BlurEffect.prototype.render = function(outputTarget){
   }).render(this.quad);
 	GL.blendFunc(GL.ONE,GL.ONE);
 	this.a++;
-  if(this.a%12==0){
+  if(count){
     this.messageShader.use({
-      rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.35, 0.5],
+      rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.5, 0.5],
       texture: this.textures.は
     }).render(this.quad);
     this.messageShader.use({
-      rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.35, 0.5],
+      rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.5, 0.5],
       texture: this.textures.ご
     }).render(this.quad);
     this.messageShader.use({
-      rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.35, 0.5],
-      texture: this.textures.ー
-    }).render(this.quad);
-
-  }
-  if(this.a%60==0&&false){
-    this.messageShader.use({
-      rect:    [-1, 1 - (this.a * 0.01) % 3, 0.7, 1],
-      texture: this.textures.は
-    }).render(this.quad);
-
-    this.messageShader.use({
-      rect:    [-1 + 0.65, 1 - (this.a * 0.012) % 3, 0.7, 1],
-      texture: this.textures.ご
-    }).render(this.quad);
-
-    this.messageShader.use({
-      rect:    [-1 + 0.65 * 2, 1 - (this.a * 0.013) % 3, 0.7, 1],
+      rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.5, 0.5],
       texture: this.textures.ー
     }).render(this.quad);
   }
