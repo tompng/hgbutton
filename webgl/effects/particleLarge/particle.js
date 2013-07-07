@@ -36,7 +36,7 @@ ParticleLarge.prototype.createGeometry = function(text){
       var x = r * Math.cos(t), y = r * Math.sin(t);
       x=Math.random()-0.5;
       y=Math.random()-0.5;
-      z=(Math.random()-0.5)*0.4;
+      z=(Math.random()-0.5)*0.1;
       var color = data.get((0.5+x)*data.width,(0.5+y)*data.height);
       if(color.a*color.r > 0.5){
         rands.push(x, -y, z);
@@ -55,12 +55,13 @@ ParticleLarge.prototype.render = function(){
   GL.clear(GL.COLOR_BUFFER_BIT);
   GL.enable(GL.BLEND);
   GL.blendFunc(GL.ONE,GL.ONE);
-  this.time += 0.01;
+  this.time += 0.02;
   var modelview;
   
   for(var i=0;i<3;i++){
     modelview=new J3DIMatrix4();
     modelview.translate(-1+i,0,-3);
+    modelview.rotate(20*this.time,Math.cos(0.01*(1+i)*this.time),Math.cos(1+0.15*(1+i)*this.time),Math.cos(2+0.17*(1+i)*this.time));
     this.shader.use({
       modelview: modelview,
       projection: this.projection,
