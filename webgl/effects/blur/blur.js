@@ -29,15 +29,20 @@ BlurEffect.prototype.flipRenderTarget = function() {
 BlurEffect.prototype.render = function(outputTarget,count){
   GL.framebuffer.setRenderTarget(this.newTarget);
   GL.enable(GL.BLEND);
-	GL.blendFunc(GL.ONE,GL.ZERO);
+  GL.blendFunc(GL.ONE,GL.ZERO);
   this.calcShader.use({
     velocity:[0,-0.001],
-		x1: [7.3,6.5],x2:[6.1, -5.3],y1:[5.3,-4.8],y2:[8.1,7.3],
+    x1: [7.3,6.5],x2:[6.1, -5.3],y1:[5.3,-4.8],y2:[8.1,7.3],
     texture: this.oldTarget.texture,
-		t:[0.03*this.a,0.02*this.a]
+    t:[0.03*this.a,0.02*this.a]
   }).render(this.quad);
-	GL.blendFunc(GL.ONE,GL.ONE);
-	this.a++;
+  GL.blendFunc(GL.ONE,GL.ONE);
+  this.a++;
+  this.messageShader.use({
+    rect:    [0.2*Math.sin(0.0137*this.a), -0.5+0.2*Math.sin(0.0073*this.a), 0.1, 0.1],
+    texture: this.textures.は
+  }).render(this.quad);
+
   if(count){
     this.messageShader.use({
       rect:    [-1+1.5*Math.random(), -1+1.5*Math.random(), 0.5, 0.5],
