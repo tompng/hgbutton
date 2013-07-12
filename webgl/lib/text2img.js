@@ -1,15 +1,25 @@
-function createCharImage(text,size){
+function createCharImage(text,size,options){
   var canvas=document.createElement("canvas");
   canvas.width=canvas.height=size;
   var g=canvas.getContext('2d');
   var font='DFMaruGothic-SB-MP-RKSJ-H';
-  g.font=size*7/8+'px '+font;
+  var lineWidth=(options&&options.lineWidth)||0;
+  var lineColor=(options&&options.lineColor)||'black'
+  var color=(options&&options.color)||'white';
+  var background=(options&&options.background);
+  g.font=size*(1-lineWidth/2)+'px '+font;
   g.textAlign='center';
   g.textBaseline='middle';
-  g.fillStyle='white';
-  g.strokeStyle='black';
-  g.lineWidth=size/8;
-  g.strokeText(text,size/2,size/2);
+  if(background){
+    g.fillStyle=background;
+    g.fillRect(0,0,size,size);
+  }
+  if(lineWidth){
+    g.lineWidth=size*lineWidth/2;
+    g.strokeStyle=lineColor;
+    g.strokeText(text,size/2,size/2);
+  }
+  g.fillStyle=color;
   g.fillText(text,size/2,size/2);
   return canvas;
 }

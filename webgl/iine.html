@@ -17,7 +17,7 @@ function setBG(){
 
 function addCharImage(text,size,font){
   var img=new Image();
-  img.src=createCharImage(text,size).toDataURL();
+  img.src=createCharImage(text,size,{lineWidth:1/4}).toDataURL();
   document.body.appendChild(img);
 }
 onload=function(){
