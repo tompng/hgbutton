@@ -58,7 +58,7 @@ class Text3D{
   void poissonEnd(){
     for(int x=1;x<W-1;x++)for(int y=1;y<H-1;y++){
       double z=map[x][y];
-      map[x][y]=128*Math.sqrt(z);
+      map[x][y]=2*W*Math.sqrt(z);
       coordsZ[x][y]=map[x][y];
     }
   }
@@ -74,7 +74,6 @@ class Text3D{
   void copyCoord(double[]out,int x,int y,int dx,int dy){
     double c=area[x][y];
     double c2=area[x+dx][y+dy];
-    if(c<=0)return;
     if(c2>0){
       out[0]=coordsX[x+dx][y+dy];
       out[1]=coordsY[x+dx][y+dy];
@@ -104,11 +103,15 @@ class Text3D{
       double dx=(getZ(xx+1,yy)-getZ(xx-1,yy))/2;
       double dy=(getZ(xx,yy+1)-getZ(xx,yy-1))/2;
 
+      double vx=cx-xx+dx*(cz-zz);
+      double vy=cy-yy+dy*(cz-zz);
+      double D=(1+dx*dx)*(1+dy*dy)-dx*dx*dy*dy;
+      double _x=(vx*(1+dy*dy)-dx*dy*vy)/D;
+      double _y=(vy*(1+dx*dx)-dx*dy*vx)/D;
+
       double dif=(xx-cx)*(xx-cx)+(yy-cy)*(yy-cy)+(zz-cz)*(zz-cz);
 
-      double _x=(cx-xx+dx*(cz-zz))/(dx*dx+1);
-      double _y=(cy-yy+dy*(cz-zz))/(dy*dy+1);
-      xx+=_x/2;yy+=_y/2;
+      xx+=_x;yy+=_y;
       zz=getZ(xx,yy);
       double dif2=(xx-cx)*(xx-cx)+(yy-cy)*(yy-cy)+(zz-cz)*(zz-cz);
 
@@ -144,7 +147,7 @@ class Text3D{
       t.coords();
     }
     t.save(new File("output.png"));
-    t.model(1);
+    t.model(2);
   }
   static int argb(double a,double r,double g,double b){
     if(a<0)a=0;if(a>1)a=1;
@@ -154,26 +157,47 @@ class Text3D{
     return ((int)(0xff*a)<<24)|((int)(0xff*r)<<16)|((int)(0xff*g)<<8)|(int)(0xff*b);
   }
   void tri(int x1,int y1,int x2,int y2,int x3,int y3){
-    double xa=coordsX[x1][y1];
-    double ya=coordsY[x1][y1];
-    double xb=coordsX[x2][y2];
-    double yb=coordsY[x2][y2];
-    double xc=coordsX[x3][y3];
-    double yc=coordsY[x3][y3];
-    dtri(xa,ya,xb,yb,xc,yc);
+    dtri(
+      coordsX[x1][y1],coordsY[x1][y1],coordsZ[x1][y1],
+      coordsX[x2][y2],coordsY[x2][y2],coordsZ[x2][y2],
+      coordsX[x3][y3],coordsY[x3][y3],coordsZ[x3][y3]);
   }
-  void dtri(double x1,double y1,double x2,double y2,double x3,double y3){
+  int P=0,PP=3;
+  double transX(double x,double y,double z){
+    x-=W/2;y-=H/2;
+    double t=Math.PI*P/(PP*PP-1)/2;
+    double _y=y,_z=z;
+    y=_y*Math.cos(t)-Math.sin(t)*_z;
+    z=_y*Math.sin(t)+Math.cos(t)*_z;
+    return x/(1+z/H)/PP+W/2/PP+P/PP*W/PP;
+  }
+  double transY(double x,double y,double z){
+    x-=W/2;y-=H/2;
+    double t=Math.PI*P/(PP*PP-1)/2;
+    double _y=y,_z=z;
+    y=_y*Math.cos(t)-Math.sin(t)*_z;
+    z=_y*Math.sin(t)+Math.cos(t)*_z;
+    return y/(1+z/H)/PP+H/2/PP+P%PP*H/PP;
+  }
+  void dtri(double x1,double y1,double z1,double x2,double y2,double z2,double x3,double y3,double z3){
     int S=1024/W;
+    double D=100;
+    for(int param=0;param<PP*PP;param++){P=param;
     System.out.println("<polygon points='"+
-      (int)(100*x1)*0.01*S+','+(int)(100*y1)*0.01*S+' '+
-      (int)(100*x2)*0.01*S+','+(int)(100*y2)*0.01*S+' '+
-      (int)(100*x3)*0.01*S+','+(int)(100*y3)*0.01*S+"'/>");
+      (int)(D*transX(x1,y1,z1))*S/D+','+(int)(D*transY(x1,y1,z1))*S/D+' '+
+      (int)(D*transX(x2,y2,z2))*S/D+','+(int)(D*transY(x2,y2,z2))*S/D+' '+
+      (int)(D*transX(x3,y3,z3))*S/D+','+(int)(D*transY(x3,y3,z3))*S/D+"'/>");
+    System.out.println("<polygon points='"+
+      (int)(D*transX(x1,y1,-z1))*S/D+','+(int)(D*transY(x1,y1,-z1))*S/D+' '+
+      (int)(D*transX(x2,y2,-z2))*S/D+','+(int)(D*transY(x2,y2,-z2))*S/D+' '+
+      (int)(D*transX(x3,y3,-z3))*S/D+','+(int)(D*transY(x3,y3,-z3))*S/D+"'/>");
+    }
   }
 
   void model(int n){
     System.out.println("<svg width='1024' height='1024' version='1.1' xmlns='http://www.w3.org/2000/svg'>");
-    System.out.println("<g stroke='black' stroke-width='0.4' fill='none'>");
-    double xys[][]=new double[100][2];
+    System.out.println("<g stroke='black' stroke-width='0.1' fill='none'>");
+    double xys[][]=new double[3][100];
     for(int x1=0;x1<W-n;x1+=n)for(int y1=0;y1<H-n;y1+=n){
       int x2=x1+n,y2=y1+n;
       boolean a=area[x1][y1]>0;
@@ -192,8 +216,9 @@ class Text3D{
         int dx=i==0?1:i==2?-1:0;
         int dy=i==1?1:i==3?-1:0;
         if(area[x][y]>0){
-          xys[xylen][0]=coordsX[x][y];
-          xys[xylen][1]=coordsY[x][y];
+          xys[0][xylen]=coordsX[x][y];
+          xys[1][xylen]=coordsY[x][y];
+          xys[2][xylen]=coordsZ[x][y];
           xylen++;
         }
         for(int j=0;j<n;j++){
@@ -201,15 +226,19 @@ class Text3D{
           double bb=area[x+dx][y+dy];
           if(aa*bb<=0){
             double dd=aa/(aa-bb);
-            xys[xylen][0]=x+dd*dx;
-            xys[xylen][1]=y+dd*dy;
+            xys[0][xylen]=x+dd*dx;
+            xys[1][xylen]=y+dd*dy;
+            xys[2][xylen]=0;
             xylen++;
            }
           x+=dx;y+=dy;
         }
       }
       for(int i=0;i<xylen-2;i++){
-        dtri(xys[0][0],xys[0][1],xys[i+1][0],xys[i+1][1],xys[i+2][0],xys[i+2][1]);
+        dtri(
+          xys[0][0],xys[1][0],xys[2][0],
+          xys[0][i+1],xys[1][i+1],xys[2][i+1],
+          xys[0][i+2],xys[1][i+2],xys[2][i+2]);
       }
     }
     System.out.println("</g></svg>");
@@ -253,24 +282,6 @@ class Text3D{
         copyCoord(coord,x,y,a,b);
         img.setRGB((int)(4*coord[0]),(int)(4*coord[1]),0xff000000);
       }
-    }
-    ImageIO.write(img,"png",new File("o.png"));
-    img=new BufferedImage(1024,1024,img.TYPE_INT_ARGB);
-    for(int x=0;x<W;x++){
-      int y=H/2;
-
-
-      int xx=(int)(coordsX[x][y]*1024/W);
-      int yy=(int)(coordsZ[x][y]*1024/W);
-      //System.out.println(xx+","+yy);
-      if(yy<0)yy=0;if(yy>=1024)yy=1024-1;
-      
-      try{img.setRGB(xx,512+yy,0xff000000);}catch(Exception e){}
-      try{img.setRGB(xx,512-yy,0xff000000);}catch(Exception e){}
-
-      try{img.setRGB(x*1024/W,512+(int)(map[x][y]*1024/W),0xffff0000);}catch(Exception e){}
-      try{img.setRGB(x*1024/W,512-(int)(map[x][y]*1024/W),0xffff0000);}catch(Exception e){}
-
     }
     ImageIO.write(img,"png",file);
   }
