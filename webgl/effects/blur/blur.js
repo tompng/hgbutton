@@ -8,6 +8,10 @@ var BlurEffect = function(){
     ご: new TextureObject({ image: createCharImage('ご', 128) }),
     ー: new TextureObject({ image: createCharImage('ー', 128) })
   };
+  var img=new Image();
+  img.src="wave.png";
+  this.waveTexture = new TextureObject({image: img});
+
   this.oldTarget = this.createRenderTarget();
   this.newTarget = this.createRenderTarget();
   var quadVertex = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
@@ -34,7 +38,8 @@ BlurEffect.prototype.render = function(outputTarget,count){
     velocity:[0,-0.001],
     x1: [7.3,6.5],x2:[6.1, -5.3],y1:[5.3,-4.8],y2:[8.1,7.3],
     texture: this.oldTarget.texture,
-    t:[0.03*this.a,0.02*this.a]
+    t:[0.03*this.a,0.02*this.a],
+    wave: this.waveTexture
   }).render(this.quad);
   GL.blendFunc(GL.ONE,GL.ONE);
   this.a++;
