@@ -36,9 +36,8 @@ BlurEffect.prototype.render = function(outputTarget,count){
   GL.blendFunc(GL.ONE,GL.ZERO);
   this.calcShader.use({
     velocity:[0,-0.001],
-    x1: [7.3,6.5],x2:[6.1, -5.3],y1:[5.3,-4.8],y2:[8.1,7.3],
     texture: this.oldTarget.texture,
-    t:[0.03*this.a,0.02*this.a],
+    t:0.0004*this.a,
     wave: this.waveTexture
   }).render(this.quad);
   GL.blendFunc(GL.ONE,GL.ONE);
