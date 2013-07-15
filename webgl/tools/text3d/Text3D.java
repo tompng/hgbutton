@@ -31,8 +31,8 @@ class Text3D{
   }
   void poisson(){
     for(int x=1;x<W-1;x++)for(int y=1;y<H-1;y++){
-      if(area[x][y]<0)continue;
       double c=area[x][y];
+      if(c<0)continue;
       double xm=area[x-1][y],xp=area[x+1][y];
       double ym=area[x][y-1],yp=area[x][y+1];
       double xml,xmz,xpl,xpz,yml,ymz,ypl,ypz;
@@ -51,14 +51,14 @@ class Text3D{
       double xpa=2/(xpl-xml)/xpl;
       double yma=2/(yml-ypl)/yml;
       double ypa=2/(ypl-yml)/ypl;
-      double param=Math.exp(-map[x][y]);
-      map[x][y]=(param/W/H+xmz*xma+xpz*xpa+ymz*yma+ypz*ypa)/(xma+xpa+yma+ypa);
+      double S=32;
+      map[x][y]=(xmz*xma+xpz*xpa+ymz*yma+ypz*ypa+S*S/W/H)/(S*S/W/H+xma+xpa+yma+ypa);
     }
   }
+
   void poissonEnd(){
     for(int x=1;x<W-1;x++)for(int y=1;y<H-1;y++){
-      double z=map[x][y];
-      map[x][y]=2*W*Math.sqrt(z);
+      map[x][y]=Math.sqrt(map[x][y])*W/10;
       coordsZ[x][y]=map[x][y];
     }
   }
