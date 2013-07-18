@@ -148,6 +148,15 @@ class Text3D{
     }
     t.save(new File("output.png"));
     t.model(2);
+
+
+    OutputStream out;
+    out=new FileOutputStream(new File("output.svg"));
+    out.write(t.svgData.toString().getBytes());
+    out.close();
+    out=new FileOutputStream(new File("output.json"));
+    out.write((t.jsonArray.toString()).getBytes());
+    out.close();
   }
   static int argb(double a,double r,double g,double b){
     if(a<0)a=0;if(a>1)a=1;
@@ -183,20 +192,39 @@ class Text3D{
     int S=1024/W;
     double D=100;
     for(int param=0;param<PP*PP;param++){P=param;
-    System.out.println("<polygon points='"+
-      (int)(D*transX(x1,y1,z1))*S/D+','+(int)(D*transY(x1,y1,z1))*S/D+' '+
-      (int)(D*transX(x2,y2,z2))*S/D+','+(int)(D*transY(x2,y2,z2))*S/D+' '+
-      (int)(D*transX(x3,y3,z3))*S/D+','+(int)(D*transY(x3,y3,z3))*S/D+"'/>");
-    System.out.println("<polygon points='"+
-      (int)(D*transX(x1,y1,-z1))*S/D+','+(int)(D*transY(x1,y1,-z1))*S/D+' '+
-      (int)(D*transX(x2,y2,-z2))*S/D+','+(int)(D*transY(x2,y2,-z2))*S/D+' '+
-      (int)(D*transX(x3,y3,-z3))*S/D+','+(int)(D*transY(x3,y3,-z3))*S/D+"'/>");
+      svgData.append("<polygon points='"+
+        (int)(D*transX(x1,y1,z1))*S/D+','+(int)(D*transY(x1,y1,z1))*S/D+' '+
+        (int)(D*transX(x2,y2,z2))*S/D+','+(int)(D*transY(x2,y2,z2))*S/D+' '+
+        (int)(D*transX(x3,y3,z3))*S/D+','+(int)(D*transY(x3,y3,z3))*S/D+"'/>");
+      svgData.append("<polygon points='"+
+        (int)(D*transX(x1,y1,-z1))*S/D+','+(int)(D*transY(x1,y1,-z1))*S/D+' '+
+        (int)(D*transX(x2,y2,-z2))*S/D+','+(int)(D*transY(x2,y2,-z2))*S/D+' '+
+        (int)(D*transX(x3,y3,-z3))*S/D+','+(int)(D*transY(x3,y3,-z3))*S/D+"'/>");
     }
+    jsonArray.addLast(
+      "[["+f2s(x1/W-0.5)+","+f2s(y1/W-0.5)+","+f2s(z1/W)+"],"+
+        "["+f2s(x2/W-0.5)+","+f2s(y2/W-0.5)+","+f2s(z2/W)+"],"+
+        "["+f2s(x3/W-0.5)+","+f2s(y3/W-0.5)+","+f2s(z3/W)+"]]");
+    jsonArray.addLast(
+      "[["+f2s(x1/W-0.5)+","+f2s(y1/W-0.5)+","+f2s(z1/W)+"],"+
+        "["+f2s(x3/W-0.5)+","+f2s(y3/W-0.5)+","+f2s(z3/W)+"],"+
+        "["+f2s(x2/W-0.5)+","+f2s(y2/W-0.5)+","+f2s(z2/W)+"]]");
+  }
+  static String f2s(double x){
+    int i=(int)Math.round(x*1000);
+    String sgn="";
+    if(i<0){sgn="-";i=-i;}
+    return sgn+i/1000+"."+i/100%10+i/10%10+i%10;
   }
 
+  StringBuffer svgData=null;
+  java.util.LinkedList<String> jsonArray=null;
+
   void model(int n){
-    System.out.println("<svg width='1024' height='1024' version='1.1' xmlns='http://www.w3.org/2000/svg'>");
-    System.out.println("<g stroke='black' stroke-width='0.1' fill='none'>");
+    svgData=new StringBuffer();
+    jsonArray=new java.util.LinkedList<String>();
+    svgData.append("<svg width='1024' height='1024' version='1.1' xmlns='http://www.w3.org/2000/svg'>");
+    svgData.append("<g stroke='black' stroke-width='0.1' fill='none'>");
     double xys[][]=new double[3][100];
     for(int x1=0;x1<W-n;x1+=n)for(int y1=0;y1<H-n;y1+=n){
       int x2=x1+n,y2=y1+n;
@@ -241,7 +269,7 @@ class Text3D{
           xys[0][i+2],xys[1][i+2],xys[2][i+2]);
       }
     }
-    System.out.println("</g></svg>");
+    svgData.append("</g></svg>");
   }
 
 
