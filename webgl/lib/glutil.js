@@ -13,8 +13,8 @@ TextureObject.prototype.load=function(options){
   var height = options.size || options.height || (options.image && options.image.height);
   var color = options.color || GL.RGBA;
   var format = options.format || GL.UNSIGNED_BYTE;
-  var wrap_s = options.wrap_s || options.wrap || GL.REPEAT;
-  var wrap_t = options.wrap_t || options.wrap || GL.REPEAT;
+  var wrap_s = options.wrap_s || options.wrap || (options.clamp && GL.CLAMP_TO_EDGE) || GL.REPEAT;
+  var wrap_t = options.wrap_t || options.wrap || (options.clamp && GL.CLAMP_TO_EDGE) || GL.REPEAT;
   var mag_filter = options.filter || options.mag_filter;
   var min_filter = options.filter || options.min_filter;
   var texture = this.texture;
@@ -24,13 +24,13 @@ TextureObject.prototype.load=function(options){
   GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, wrap_t);
   if(options.mipmap){
     mag_filter = mag_filter || GL.LINEAR;
-    min_filter = min_filter || GL.LINEAR_MIPMAP_NEAREST;
+    min_filter = min_filter || GL.LINEAR_MIPMAP_LINEAR;
     GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, mag_filter || GL.LINEAR);
-    GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, min_filter || GL.LINEAR_MIPMAP_NEAREST);
+    GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, min_filter || GL.LINEAR_MIPMAP_LINEAR);
     GL.generateMipmap(GL.TEXTURE_2D);
   }else{
-    GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, mag_filter || GL.LINEAR);
-    GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, min_filter || GL.LINEAR);
+    GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, mag_filter || (options.nearest && GL.NEAREST) || GL.LINEAR);
+    GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, min_filter || (options.nearest && GL.NEAREST) || GL.LINEAR);
   }
   if(image){
     GL.texImage2D(GL.TEXTURE_2D, 0, color, color, GL.UNSIGNED_BYTE, image);

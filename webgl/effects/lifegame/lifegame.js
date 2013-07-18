@@ -18,7 +18,7 @@ var LifeGame = function(){
 }
 
 LifeGame.prototype.createRenderTarget = function() {
-  var texture = new TextureObject({size: this.size, filter: GL.NEAREST});
+  var texture = new TextureObject({size: this.size, nearest: true});
   return new RenderTarget({texture: texture})
 }
 
