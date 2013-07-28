@@ -1,9 +1,9 @@
 var LifeGame = function(){
   this.size = 512;
-  this.calcShader    = new ShaderObject({ vert: 'vertex.vert', frag: 'calc.frag' });
-  this.renderShader  = new ShaderObject({ vert: 'vertex.vert', frag: 'render.frag' });
-  this.messageShader = new ShaderObject({ vert: 'image.vert',  frag: 'image.frag' });
-  this.noiseShader = new ShaderObject({ vert: 'image.vert',  frag: 'noise.frag' });
+  this.calcShader    = new ShaderObject({ vert: 'lifegame/vertex.vert', frag: 'lifegame/calc.frag' });
+  this.renderShader  = new ShaderObject({ vert: 'lifegame/vertex.vert', frag: 'lifegame/render.frag' });
+  this.messageShader = new ShaderObject({ vert: 'lifegame/image.vert',  frag: 'lifegame/image.frag' });
+  this.noiseShader = new ShaderObject({ vert: 'lifegame/image.vert',  frag: 'lifegame/noise.frag' });
   this.textures = [
     new TextureObject({ image: createCharImage('は', 128) }),
     new TextureObject({ image: createCharImage('ご', 128) }),
@@ -29,22 +29,25 @@ LifeGame.prototype.flipRenderTarget = function() {
 };
 
 LifeGame.prototype.render = function(outputTarget, count){
-
+  GL.blendFunc(GL.ONE,GL.ZERO);
+  
   for(var i=0;i<count;i++){
     var size=1+Math.random();
     this.list.push({
       size:size,
       x:(2-size)*Math.random()-1,
-      y:1+size/6
+      y:1+size/6,
+      v:0.01*(1+Math.random())
     })
   }
 
-  for(var i=0;i<this.list.length;i++)this.list[i].y-=0.02;
-  while(true){
-    var o=this.list[0];
-    if(o&&o.y+o.size/3<-1)this.list.shift();
-    else break;
+  var newlist=[];
+  for(var i=0;i<this.list.length;i++){
+    var o=this.list[i];
+    o.y-=o.v;
+    if(o.y+o.size/6>-1)newlist.push(o);
   }
+  this.list=newlist;
 
   GL.framebuffer.setRenderTarget(this.newTarget);
   this.calcShader.use({
@@ -69,13 +72,14 @@ LifeGame.prototype.render = function(outputTarget, count){
     texture: this.newTarget.texture,
   }).render(this.quad);
 
-
+  GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
   for(var i=0;i<this.list.length;i++){
     var o=this.list[i];
     for(var j=0;j<this.textures.length;j++){
       this.messageShader.use({
         rect:    [o.x+j*o.size/3, o.y-o.size/3,o.size/3,o.size/3],
-        texture: this.textures[j]
+        texture: this.textures[j],
+        color:[1,1,1,0.4]
       }).render(this.quad);
     }
   }

@@ -1,5 +1,14 @@
+<meta charset='utf-8'>
+<script src="../lib/glutil.js"></script>
+<script src="../lib/shader.js"></script>
+<script src="../lib/text2img.js"></script>
+<script src="blur/blur.js" charset="utf-8"></script>
+<script src="lifegame/lifegame.js" charset="utf-8"></script>
+<script>
+
+
 var GL,FB;
-function start(effectClass){
+onload=function(){
   var flag=false;
   document.body.onclick=function(){flag=true;}
   document.body.onkeydown=function(){flag=true;}
@@ -16,18 +25,33 @@ function start(effectClass){
     GL.framebuffer.setRenderTarget(renderTarget);
   }
   window.onresize();
-  GL.clearColor(0,1,0,1)
+  GL.clearColor(0,0,0,1)
   GL.clear(GL.COLOR_BUFFER_BIT);
   GL.disable(GL.DEPTH_TEST);
   GL.enable(GL.BLEND);
-  var effect = new effectClass();
-  effect.render(renderTarget,1);
+  var effect1 = new LifeGame();
+  var effect2 = new BlurEffect();
+  effect1.render(renderTarget,1);
+  effect2.render(renderTarget,1);
   var t=new Date();
   setInterval(function(){
+    GL.clear(GL.COLOR_BUFFER_BIT);
+    GL.blendFunc(GL.ONE,GL.ZERO);
     if(flag&&(new Date()-1000/10>t)){
-      effect.render(renderTarget,1);
+      effect1.render(renderTarget,1);
+      effect2.render(renderTarget,1);
       flag=false;
       t=new Date();
-    }else effect.render(renderTarget,0);
+    }else{
+      effect1.render(renderTarget,0);
+      effect2.render(renderTarget,0);
+    }
   },10)
 }
+
+
+
+
+
+</script>
+<canvas id=webglcanvas width=1024 height=512></canvas>
