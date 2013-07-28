@@ -1,5 +1,5 @@
 var GL,FB;
-function start(effectClass){
+function start(effectClass,baseURL){
   var flag=false;
   document.body.onclick=function(){flag=true;}
   document.body.onkeydown=function(){flag=true;}
@@ -20,7 +20,7 @@ function start(effectClass){
   GL.clear(GL.COLOR_BUFFER_BIT);
   GL.disable(GL.DEPTH_TEST);
   GL.enable(GL.BLEND);
-  var effect = new effectClass();
+  var effect = new effectClass(baseURL);
   effect.render(renderTarget,1);
   var t=new Date();
   setInterval(function(){

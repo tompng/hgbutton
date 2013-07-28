@@ -1,15 +1,17 @@
-var BlurEffect = function(){
+var BlurEffect = function(url){
+  if(!url)url = ""
+  this.baseURL = url;
   this.size = 512;
-  this.calcShader    = new ShaderObject({vert: 'blur/vertex.vert', frag: 'blur/calc.frag'});
-  this.renderShader  = new ShaderObject({vert: 'blur/vertex.vert', frag: 'blur/render.frag'});
-  this.messageShader = new ShaderObject({vert: 'blur/image.vert',  frag: 'blur/image.frag'});
+  this.calcShader    = new ShaderObject({vert: url+'vertex.vert', frag: url+'calc.frag'});
+  this.renderShader  = new ShaderObject({vert: url+'vertex.vert', frag: url+'render.frag'});
+  this.messageShader = new ShaderObject({vert: url+'image.vert',  frag: url+'image.frag'});
   this.textures = [
     new TextureObject({image: createCharImage('は', 128), clamp: true, mipmap: true}),
     new TextureObject({image: createCharImage('ご', 128), clamp: true, mipmap: true}),
     new TextureObject({image: createCharImage('ー', 128), clamp: true, mipmap: true})
   ];
   var img=new Image();
-  img.src="blur/wave.png";
+  img.src = url+"wave.png";
   this.waveTexture = new TextureObject({image: img});
 
   this.oldTarget = this.createRenderTarget();

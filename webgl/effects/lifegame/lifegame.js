@@ -1,9 +1,11 @@
-var LifeGame = function(){
+var LifeGame = function(url){
+  if(!url)url = ""
+  this.baseURL = url;
   this.size = 512;
-  this.calcShader    = new ShaderObject({ vert: 'lifegame/vertex.vert', frag: 'lifegame/calc.frag' });
-  this.renderShader  = new ShaderObject({ vert: 'lifegame/vertex.vert', frag: 'lifegame/render.frag' });
-  this.messageShader = new ShaderObject({ vert: 'lifegame/image.vert',  frag: 'lifegame/image.frag' });
-  this.noiseShader = new ShaderObject({ vert: 'lifegame/image.vert',  frag: 'lifegame/noise.frag' });
+  this.calcShader    = new ShaderObject({ vert: url+'vertex.vert', frag: url+'calc.frag' });
+  this.renderShader  = new ShaderObject({ vert: url+'vertex.vert', frag: url+'render.frag' });
+  this.messageShader = new ShaderObject({ vert: url+'image.vert',  frag: url+'image.frag' });
+  this.noiseShader = new ShaderObject({ vert: url+'image.vert',  frag: url+'noise.frag' });
   this.textures = [
     new TextureObject({ image: createCharImage('は', 128) }),
     new TextureObject({ image: createCharImage('ご', 128) }),

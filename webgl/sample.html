@@ -1,9 +1,10 @@
 <meta charset='utf-8'>
-<script src="../lib/glutil.js"></script>
-<script src="../lib/shader.js"></script>
-<script src="../lib/text2img.js"></script>
-<script src="blur/blur.js" charset="utf-8"></script>
-<script src="lifegame/lifegame.js" charset="utf-8"></script>
+<script src="lib/glutil.js"></script>
+<script src="lib/shader.js"></script>
+<script src="lib/text2img.js"></script>
+<script src="effects/blur/blur.js" charset="utf-8"></script>
+<script src="effects/lifegame/lifegame.js" charset="utf-8"></script>
+<script src="aftereffect/square/square.js" charset="utf-8"></script>
 <script>
 
 
@@ -29,8 +30,9 @@ onload=function(){
   GL.clear(GL.COLOR_BUFFER_BIT);
   GL.disable(GL.DEPTH_TEST);
   GL.enable(GL.BLEND);
-  var effect1 = new LifeGame();
-  var effect2 = new BlurEffect();
+  var effect1 = new LifeGame('effects/lifegame/');
+  var effect2 = new BlurEffect('effects/blur/');
+  var effect3 = new SquareEffect('aftereffect/square/');
   effect1.render(renderTarget,1);
   effect2.render(renderTarget,1);
   var t=new Date();
@@ -46,6 +48,7 @@ onload=function(){
       effect1.render(renderTarget,0);
       effect2.render(renderTarget,0);
     }
+    effect3.render(renderTarget)
   },10)
 }
 
