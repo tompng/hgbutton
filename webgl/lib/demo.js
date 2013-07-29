@@ -24,6 +24,7 @@ function start(effectClass,baseURL){
   effect.render(renderTarget,1);
   var t=new Date();
   setInterval(function(){
+    GL.clear(GL.COLOR_BUFFER_BIT);
     if(flag&&(new Date()-1000/10>t)){
       effect.render(renderTarget,1);
       flag=false;

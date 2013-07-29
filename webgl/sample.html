@@ -5,6 +5,7 @@
 <script src="effects/blur/blur.js" charset="utf-8"></script>
 <script src="effects/lifegame/lifegame.js" charset="utf-8"></script>
 <script src="aftereffect/square/square.js" charset="utf-8"></script>
+<script src="aftereffect/sugokuiine/sugoku.js" charset="utf-8"></script>
 <script>
 
 
@@ -33,6 +34,7 @@ onload=function(){
   var effect1 = new LifeGame('effects/lifegame/');
   var effect2 = new BlurEffect('effects/blur/');
   var effect3 = new SquareEffect('aftereffect/square/');
+  var effect4 = new SugokuEffect('aftereffect/sugokuiine/');
   effect1.render(renderTarget,1);
   effect2.render(renderTarget,1);
   var t=new Date();
@@ -48,7 +50,8 @@ onload=function(){
       effect1.render(renderTarget,0);
       effect2.render(renderTarget,0);
     }
-    effect3.render(renderTarget)
+    effect3.render(renderTarget);
+    effect4.render(renderTarget);
   },10)
 }
 
