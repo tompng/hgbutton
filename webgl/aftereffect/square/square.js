@@ -20,19 +20,20 @@ SquareEffect.prototype.render = function(outputTarget){
   GL.blendFunc(GL.SRC_ALPHA,GL.ONE);
   this.time++;
   var m=60;
-  var n=10;
-  var phase=this.time%(3*m);
-  if(phase<m){
-    var t=phase/m,et=0.5;
-    for(var ix=0;ix<n;ix++)for(var iy=0;iy<n;iy++){
-      var tt=(1+Math.sin(123*ix+456*iy+789))*1000%1*(1-et);
-      var a=(t-tt)/et;
-      this.rect(2*ix/n-1,2*iy/n-1,2/n,2/n,a>1?1:a<0?0:a*a*(3-2*a));
-    }
-  }else if(phase<2*m){
-    this.rect(-1,-1,2,2,1);
-  }else{
-    var t=(phase-2*m)/m;
-    if(0<=t&&t<1)this.rect(-1,-1,2,2,1+2*t*t*t-3*t*t);
+  var n=12;
+  var t=this.time%(3*m)/m,et=0.4;
+  for(var ix=0;ix<n;ix++)for(var iy=0;iy<n;iy++){
+    var t0=(1+Math.sin(123*ix+456*iy+789))*1000%1*(1-et);
+    var t1=t0+et;
+    var t2=1+(1+Math.sin(789*ix+123*iy+456))*1000%1*(1-et);;
+    var t3=t2+et;
+    var a;
+    if(t<t0)a=0;
+    else if(t<t1)a=(t-t0)/et;
+    else if(t<t2)a=1;
+    else if(t<t3)a=1-(t-t2)/et;
+    else a=0;
+    var alpha=0.8+(1+Math.sin(987*ix+654*iy+321))*1000%1*0.2;
+    this.rect(2*ix/n-1,2*iy/n-1,2/n,2/n,alpha*a*a*(3-2*a));
   }
 }
