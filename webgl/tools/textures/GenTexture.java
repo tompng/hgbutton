@@ -25,6 +25,61 @@ class GenTexture{
       img.setRGB(x,y,0xff000000|(r<<16)|(g<<8)|b);
     }
     ImageIO.write(img,"png",new File("out2.png"));
+
+    int L=11;
+    int H=1<<L;
+    int W=H/4;
+    double[][][]maps=zlevels(H);
+    double zmap[][]=new double[H][H];
+    for(int x=0;x<H;x++)for(int y=0;y<H;y++){
+      double z=0;
+      for(int i=0;i<maps.length-4;i++)z+=maps[i][x][y]*Math.pow(i+1,0.65);
+      zmap[x][y]=z;
+    }
+    normalize01(zmap,H);
+    for(int x=0;x<H;x++)for(int y=0;y<H;y++){
+      double z0=zmap[x][y];
+      double z=z0;
+      z=z*z*(3-2*z);
+      z=z*z*(3-2*z);
+      z=z*z*(3-2*z);
+      z=(2*z-1)*(2*z-1);
+      zmap[x][y]=0.5*z+0.5*z0;
+    }
+    normalize01(zmap,H);
+    img=new BufferedImage(W,H,BufferedImage.TYPE_INT_RGB);
+    for(int x=0;x<W;x++)for(int y=0;y<H;y++){
+      double dx=(zmap[(x+1)%H][y]-zmap[(x+H-1)%H][y])*W/10;
+      double dy=(zmap[x][(y+1)%H]-zmap[x][(y+H-1)%H])*W/10;
+      double dz=1;
+      double dr=Math.sqrt(1+dx*dx+dy*dy);
+      dx/=dr;dy/=dr;dz/=dr;
+      int r=(int)(0xff*(1+dx)/2);
+      int g=(int)(0xff*(1+dy)/2);
+      int b=(int)(0xff*(1+dz)/2);
+      img.setRGB(x,y,(r<<16)|(g<<8)|b);
+    }
+    ImageIO.write(img,"png",new File("out3.png"));
+
+    for(int x=0;x<W;x++)for(int y=0;y<H;y++){
+      int r,g,b;
+      r=g=b=(int)(0xff*zmap[x][y]);
+      img.setRGB(x,y,(r<<16)|(g<<8)|b);
+    }
+    ImageIO.write(img,"png",new File("out4.png"));
+
+    for(int x=0;x<W;x++)for(int y=0;y<H;y++){
+      double dx=(zmap[(x+1)%H][y]-zmap[(x+H-1)%H][y])*W/10;
+      double dy=(zmap[x][(y+1)%H]-zmap[x][(y+H-1)%H])*W/10;
+      double dz=1;
+      double dr=Math.sqrt(1+dx*dx+dy*dy);
+      dx/=dr;dy/=dr;dz/=dr;
+      int r,g,b;
+      r=g=b=(int)(0xff*(dz));
+      img.setRGB(x,y,(r<<16)|(g<<8)|b);
+    }
+    ImageIO.write(img,"png",new File("out5.png"));
+
   }
 
   static double[][][]rot(double[][]map,int SIZE){
@@ -45,6 +100,26 @@ class GenTexture{
     return out;
   }
 
+
+
+  static double[][][] zlevels(int SIZE){
+    int level=1;
+    while((1<<level)<SIZE)level++;
+    double[][][]maps=new double[level][SIZE][SIZE];
+    double original[][]=new double[SIZE][SIZE];
+    for(int x=0;x<SIZE;x++)for(int y=0;y<SIZE;y++)original[x][y]=Math.random()-0.5;
+    for(int i=0;i<level;i++){
+      double[][]map=maps[i];
+      for(int x=0;x<SIZE;x++)for(int y=0;y<SIZE;y++)map[x][y]=original[x][y];
+      double scale=(double)(1<<i)/SIZE;
+      smoothX(map,SIZE,scale);
+      transpose(map,SIZE);
+      smoothX(map,SIZE,scale);
+    }
+    return maps;
+  }
+
+
   static double[][] make(int SIZE, double scale){
     double[][]map=new double[SIZE][SIZE];
     for(int x=0;x<SIZE;x++)for(int y=0;y<SIZE;y++)map[x][y]=Math.random()-0.5;
@@ -54,6 +129,18 @@ class GenTexture{
     normalize(map,SIZE);
     return map;
   }
+
+  static void normalize01(double[][]map,int SIZE){
+    double min,max;min=max=map[0][0];
+    for(int x=0;x<SIZE;x++)for(int y=0;y<SIZE;y++){
+      if(max<map[x][y])max=map[x][y];
+      if(map[x][y]<min)min=map[x][y];
+    }
+    for(int x=0;x<SIZE;x++)for(int y=0;y<SIZE;y++){
+      map[x][y]=(map[x][y]-min)/(max-min);
+    }
+  }
+
 
   static void normalize(double[][]map,int SIZE){
     double max=0;
