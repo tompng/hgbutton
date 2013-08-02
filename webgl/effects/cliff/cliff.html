@@ -4,5 +4,11 @@
 <script src="../../lib/text2img.js"></script>
 <script src="cliff.js" charset="utf-8"></script>
 <script src="../../lib/demo.js"></script>
-<script>onload=function(){start(CliffEffect,'./')}</script>
+<script>onload=function(){
+  start(CliffEffect,'./')
+  window.onmousewheel=function(e){
+    if(CliffEffect.y==undefined)CliffEffect.y=0;
+    CliffEffect.y-=0.0002*e.wheelDelta;
+  }
+}</script>
 <canvas id=webglcanvas width=1024 height=512></canvas>
