@@ -64,8 +64,8 @@ BlurEffect.prototype.render = function(outputTarget,count){
     }
   }
   var phase=this.time*0.001;
-  var offset=0;
-  var scale=1;
+  var offset=0.5;
+  var scale=0.4;
   var color=[
     Math.min(1,Math.max(scale*(offset+Math.cos(phase)),0)),
     Math.min(1,Math.max(scale*(offset+Math.cos(phase+2*Math.PI/3)),0)),
