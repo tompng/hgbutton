@@ -7,6 +7,10 @@ var CliffEffect = function(url){
   nimg.src = url+"norm.jpg";
   this.normal = new TextureObject({image: nimg});
 
+  var timg = new Image();
+  timg.src = url+"geom.jpg"//url+"texture.jpg";
+  this.texture = new TextureObject({image: timg});
+
   var himg = new Image();
   himg.src = url+"geom.jpg";
 
@@ -74,6 +78,7 @@ CliffEffect.prototype.render = function(outputTarget){
       light: [lx/lr,ly/lr,lz/lr],
       position: [0,y+4*i,-0.4],
       normal: this.normal,
+      texture: this.texture
     }).render(this.geometry);
   }
   GL.disable(GL.DEPTH_TEST);
