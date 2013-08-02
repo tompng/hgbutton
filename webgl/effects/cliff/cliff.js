@@ -8,7 +8,7 @@ var CliffEffect = function(url){
   this.normal = new TextureObject({image: nimg});
 
   var timg = new Image();
-  timg.src = url+"geom.jpg"//url+"texture.jpg";
+  timg.src = url+"texture.jpg";
   this.texture = new TextureObject({image: timg});
 
   var himg = new Image();
@@ -40,16 +40,16 @@ CliffEffect.prototype.createGeometry = function(img){
   console.log(W,H);
   for(var iy=0;iy<H;iy+=2){
     for(var ix=0;ix<=W;ix++){
-      texcoord.push(ix/W,iy/H);
-      texcoord.push(ix/W,(iy+1)/H);
-      vertex.push(ix/W-0.5,iy/W-1,get(ix,iy));
-      vertex.push(ix/W-0.5,(iy+1)/W-1,get(ix,iy+1));
+      texcoord.push(ix/W,1-iy/H);
+      texcoord.push(ix/W,1-(iy+1)/H);
+      vertex.push(ix/W-0.5,iy/W-1,get(ix,H-iy-1));
+      vertex.push(ix/W-0.5,(iy+1)/W-1,get(ix,H-iy-2));
     }
     for(var ix=W;ix>=0;ix--){
-      texcoord.push(ix/W,(iy+1)/H);
-      texcoord.push(ix/W,(iy+2)/H);
-      vertex.push(ix/W-0.5,(iy+1)/W-1,get(ix,iy+1));
-      vertex.push(ix/W-0.5,(iy+2)/W-1,get(ix,iy+2));
+      texcoord.push(ix/W,1-(iy+1)/H);
+      texcoord.push(ix/W,1-(iy+2)/H);
+      vertex.push(ix/W-0.5,(iy+1)/W-1,get(ix,H-iy-2));
+      vertex.push(ix/W-0.5,(iy+2)/W-1,get(ix,H-iy-3));
     }
   }
   var vbuf = new ArrayBufferObject(3, vertex);
@@ -68,14 +68,17 @@ CliffEffect.prototype.render = function(outputTarget){
   GL.enable(GL.DEPTH_TEST);
   var lx,ly,lz;
   var time=(new Date()-this.time0)/1000;
-  lx=0.3*(
+  lx=0.5*(
     Math.sin(1.1*time)+
     Math.sin(1.3*time)+
     Math.sin(1.5*time)+
     Math.sin(1.7*time)+
     Math.sin(1.9*time)+
     Math.sin(2.3*time));
-  ly=0.5;
+  ly=0.5*(
+    Math.sin(1.2*time)+
+    Math.sin(1.7*time)+
+    Math.sin(2.1*time));
   lz=1;
   var lr=Math.sqrt(lx*lx+ly*ly+lz*lz);
   for(var i=-1;i<=1;i++){
