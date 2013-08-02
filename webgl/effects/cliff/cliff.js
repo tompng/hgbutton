@@ -28,8 +28,8 @@ CliffEffect.prototype.createGeometry = function(img){
   var data = new CanvasData(canvas);
   var vertex = [];
   var texcoord = [];
-  var W = img.width/8/4;
-  var H = img.height/8/4;
+  var W = img.width/8;
+  var H = img.height/8;
   function get(ix,iy){
     var x=ix*img.width/W;
     var y=iy*img.height/H;
@@ -41,14 +41,14 @@ CliffEffect.prototype.createGeometry = function(img){
   console.log(W,H);
   for(var iy=0;iy<H;iy+=2){
     for(var ix=0;ix<=W;ix++){
-      texcoord.push(ix/W,1-iy/H);
-      texcoord.push(ix/W,1-(iy+1)/H);
+      texcoord.push(ix/W,(H-iy-1)/H);
+      texcoord.push(ix/W,(H-iy-2)/H);
       vertex.push(ix/W-0.5,iy/W-1,get(ix,H-iy-1));
       vertex.push(ix/W-0.5,(iy+1)/W-1,get(ix,H-iy-2));
     }
     for(var ix=W;ix>=0;ix--){
-      texcoord.push(ix/W,1-(iy+1)/H);
-      texcoord.push(ix/W,1-(iy+2)/H);
+      texcoord.push(ix/W,(H-iy-2)/H);
+      texcoord.push(ix/W,(H-iy-3)/H);
       vertex.push(ix/W-0.5,(iy+1)/W-1,get(ix,H-iy-2));
       vertex.push(ix/W-0.5,(iy+2)/W-1,get(ix,H-iy-3));
     }
