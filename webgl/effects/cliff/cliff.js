@@ -28,13 +28,14 @@ CliffEffect.prototype.createGeometry = function(img){
   var data = new CanvasData(canvas);
   var vertex = [];
   var texcoord = [];
-  var W = img.width/8;
-  var H = img.height/8;
+  var W = img.width/8/4;
+  var H = img.height/8/4;
   function get(ix,iy){
     var x=ix*img.width/W;
     var y=iy*img.height/H;
+    if(x<0)x=0;
     if(x>=img.width)x=img.width-1;
-    if(y>=img.height)y=0;
+    y=(y%img.height+img.height)%img.height;
     return data.get(x,y).r/10;
   }
   console.log(W,H);
@@ -75,7 +76,7 @@ CliffEffect.prototype.render = function(outputTarget){
     Math.sin(1.7*time)+
     Math.sin(1.9*time)+
     Math.sin(2.3*time));
-  ly=0.5*(
+  ly=0.5*(1+
     Math.sin(1.2*time)+
     Math.sin(1.7*time)+
     Math.sin(2.1*time));
@@ -85,7 +86,7 @@ CliffEffect.prototype.render = function(outputTarget){
     var y=0.02*time%4-2;
     this.shader.use({
       light: [lx/lr,ly/lr,lz/lr],
-      position: [0,y+4*i,-0.4],
+      position: [0,y+4*i,-0.5],
       normal: this.normal,
       texture: this.texture
     }).render(this.geometry);
