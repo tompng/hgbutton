@@ -68,12 +68,18 @@ CliffEffect.prototype.render = function(outputTarget){
   GL.enable(GL.DEPTH_TEST);
   var lx,ly,lz;
   var time=(new Date()-this.time0)/1000;
-  lx=Math.sin(1.21*time);
-  ly=2;
+  lx=0.3*(
+    Math.sin(1.1*time)+
+    Math.sin(1.3*time)+
+    Math.sin(1.5*time)+
+    Math.sin(1.7*time)+
+    Math.sin(1.9*time)+
+    Math.sin(2.3*time));
+  ly=0.5;
   lz=1;
   var lr=Math.sqrt(lx*lx+ly*ly+lz*lz);
   for(var i=-1;i<=1;i++){
-    var y=0.1*time%4-2;
+    var y=0.02*time%4-2;
     this.shader.use({
       light: [lx/lr,ly/lr,lz/lr],
       position: [0,y+4*i,-0.4],
