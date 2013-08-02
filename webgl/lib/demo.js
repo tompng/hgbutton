@@ -16,7 +16,7 @@ function start(effectClass,baseURL){
     GL.framebuffer.setRenderTarget(renderTarget);
   }
   window.onresize();
-  GL.clearColor(0,1,0,1)
+  GL.clearColor(0,0,0,1)
   GL.clear(GL.COLOR_BUFFER_BIT);
   GL.disable(GL.DEPTH_TEST);
   GL.enable(GL.BLEND);

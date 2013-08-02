@@ -4,6 +4,7 @@
 <script src="lib/text2img.js"></script>
 <script src="effects/blur/blur.js" charset="utf-8"></script>
 <script src="effects/lifegame/lifegame.js" charset="utf-8"></script>
+<script src="effects/cliff/cliff.js" charset="utf-8"></script>
 <script src="aftereffect/square/square.js" charset="utf-8"></script>
 <script src="aftereffect/sugokuiine/sugoku.js" charset="utf-8"></script>
 <script>
@@ -31,7 +32,8 @@ onload=function(){
   GL.clear(GL.COLOR_BUFFER_BIT);
   GL.disable(GL.DEPTH_TEST);
   GL.enable(GL.BLEND);
-  var effect1 = new LifeGame('effects/lifegame/');
+  //var effect1 = new LifeGame('effects/lifegame/');
+  var effect1 = new CliffEffect('effects/cliff/');
   var effect2 = new BlurEffect('effects/blur/');
   var effect3 = new SquareEffect('aftereffect/square/');
   var effect4 = new SugokuEffect('aftereffect/sugokuiine/');
@@ -50,8 +52,8 @@ onload=function(){
       effect1.render(renderTarget,0);
       effect2.render(renderTarget,0);
     }
-    effect3.render(renderTarget);
-    effect4.render(renderTarget);
+    // effect3.render(renderTarget);
+    // effect4.render(renderTarget);
   },10)
 }
 

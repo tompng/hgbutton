@@ -11,7 +11,7 @@ var BlurEffect = function(url){
     new TextureObject({image: createCharImage('ー', 128), clamp: true, mipmap: true})
   ];
   var img=new Image();
-  img.src = url+"wave.png";
+  img.src = url+"wave.jpg";
   this.waveTexture = new TextureObject({image: img});
 
   this.oldTarget = this.createRenderTarget();
