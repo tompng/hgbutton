@@ -17,8 +17,8 @@ var BlurEffect = function(url){
   this.oldTarget = this.createRenderTarget();
   this.newTarget = this.createRenderTarget();
   var quadVertex = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
-  this.quad      = new Geometry(GL.TRIANGLE_FAN, 4, { vertex: quadVertex });
-  this.time         = 0;
+  this.quad = new Geometry(GL.TRIANGLE_FAN, 4, { vertex: quadVertex });
+  this.time0 = new Date();
 
 }
 
@@ -36,19 +36,19 @@ BlurEffect.prototype.flipRenderTarget = function() {
 BlurEffect.prototype.render = function(outputTarget,count){
   GL.framebuffer.setRenderTarget(this.newTarget);
   GL.blendFunc(GL.ONE,GL.ZERO);
+  var time = (new Date()-this.time0)/1000;
   this.calcShader.use({
     velocity:[0,-0.001],
     texture: this.oldTarget.texture,
-    t:0.0004*this.time,
+    t:0.04*time,
     wave: this.waveTexture
   }).render(this.quad);
   GL.blendFunc(GL.SRC_ALPHA,GL.ONE);
-  this.time++;
   var size=0.2;
 
   for(var i=0;i<3;i++){
     this.messageShader.use({
-      rect:    [0.1*Math.sin((0.0137-0.002*i)*this.time)+(i-1)/2-size/2, -0.5+0.1*Math.sin((0.0073+0.002*i)*this.time), size, size],
+      rect:    [0.1*Math.sin((0.67-0.1*i)*time)+(i-1)/2-size/2, -0.5+0.1*Math.sin((0.37+0.1*i)*time), size, size],
       color: [0.02,0.02,0.02,1],
       texture: this.textures[i]
     }).render(this.quad);
@@ -63,7 +63,7 @@ BlurEffect.prototype.render = function(outputTarget,count){
       }).render(this.quad);
     }
   }
-  var phase=this.time*0.001;
+  var phase=5.8+time*0.001;
   var offset=0.5;
   var scale=0.4;
   var color=[
