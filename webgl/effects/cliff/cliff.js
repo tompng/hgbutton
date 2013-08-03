@@ -3,20 +3,13 @@ var CliffEffect = function(url){
   this.baseURL = url;
   this.size = 512;
   this.shader    = new ShaderObject({vert: url+'nmap.vert', frag: url+'nmap.frag'});
-  var nimg = new Image();
-  nimg.src = url+"norm.jpg";
-  this.normal = new TextureObject({image: nimg});
-
-  var timg = new Image();
-  timg.src = url+"texture.jpg";
-  this.texture = new TextureObject({image: timg});
+  this.normal = new TextureObject({image: url+"norm.jpg"});
+  this.texture = new TextureObject({image: url+"texture.jpg"});
 
   var himg = new Image();
   himg.src = url+"geom.jpg";
-
   var self = this;
   himg.onload = function(){self.createGeometry(himg);}
-
 }
 
 

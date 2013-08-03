@@ -17,16 +17,20 @@ function setBG(){
 
 function addCharImage(text,size,font){
   var img=new Image();
-  img.src=createCharImage(text,size,{lineWidth:1/4}).toDataURL();
+  img.src=createCharImage(text,size,{lineWidth:1/4,color:'yellow',lineColor:'cyan',background:'black'}).toDataURL();
   document.body.appendChild(img);
 }
 onload=function(){
   setBG();
-  addCharImage('い',512)
-  addCharImage('い',512)
-  addCharImage('ね',512)
-  addCharImage('は',512)
-  addCharImage('ご',512)
-  addCharImage('ー',512)
+  addCharImage('い',256)
+  addCharImage('い',256)
+  addCharImage('ね',256)
+  addCharImage('は',256)
+  addCharImage('ご',256)
+  addCharImage('ー',256)
+  addCharImage('超',256)
+  addCharImage('凄',256)
+  addCharImage('く',256)
+  addCharImage('！',256)
 }
 </script>

@@ -2,13 +2,8 @@ var SugokuEffect = function(url){
   if(!url)url = ""
   this.baseURL = url;
   this.shader = new ShaderObject({vert: url+'image.vert',  frag: url+'image.frag'});
-  function image(path){
-    var img=new Image();
-    img.src=url+path;
-    return img;
-  }
   var textures=[];
-  for(var i=0;i<5;i++)textures[i]=new TextureObject({image: image(i+'.png'), clamp: true, mipmap: true});
+  for(var i=0;i<5;i++)textures[i]=new TextureObject({image: url+i+'.png', clamp: true, mipmap: true});
   this.textures = [
     textures[0],
     textures[1],
