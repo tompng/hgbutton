@@ -63,7 +63,7 @@ BlurEffect.prototype.render = function(outputTarget,count){
       }).render(this.quad);
     }
   }
-  var phase=5.8+time*0.001;
+  var phase=5.8+time*0.002;
   var offset=0.5;
   var scale=0.4;
   var color=[

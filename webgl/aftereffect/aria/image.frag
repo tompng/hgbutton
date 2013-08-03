@@ -15,7 +15,7 @@ void main(void){
                texture2D(wave,wc2*vec2(0.1,0.8));
 	gl_FragColor=vec4(
   vec3(1,1,1)*(1.-text)+
-  (vec3(0.3,0.4,0.5)+color.rgb*vec3(0.1,0.2,0.4))*text,
+  (vec3(0.1,0.3,0.5)+color.rgb*vec3(0.2,0.4,0.6))*text,
   data.g*alpha
   );
 }
