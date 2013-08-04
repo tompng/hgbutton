@@ -113,6 +113,9 @@ function load(){
     larr.push(2,2*Math.PI*(i+1)/N,(i+1)/N);
   }
   lgeom=new Geometry(GL.TRIANGLES,3*N,{vertex:new ArrayBufferObject(3,larr)}); 
+  texture.onload=text.onload=shader.onload=light.onload=function(){
+    renderWithArg();
+  }
 }
 
 function render(time,ovalue,cvalue){
@@ -121,9 +124,14 @@ function render(time,ovalue,cvalue){
   GL.clear(GL.COLOR_BUFFER_BIT);
   GL.enable(GL.BLEND);
   GL.blendFunc(GL.ONE, GL.ONE);
+  function col(t){
+    t=2*Math.PI*t;
+    return Math.min(1,Math.max(0.2,0.5+0.8*Math.cos(t)));
+  }
   light.use({
     time: time,
     texture: wave,
+    rgb: [col(0.1*time),col(0.1*time+1/3),col(0.1*time+2/3)],
     phase: cvalue
   }).render(lgeom);
   GL.blendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE);
