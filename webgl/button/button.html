@@ -1,0 +1,52 @@
+<meta charset='utf-8'>
+<title>xhago button</title>
+<script src="../lib/glutil.js"></script>
+<script src="../lib/shader.js"></script>
+<script src="button.js" charset="utf-8"></script>
+<script>onload=start</script>
+<style>
+body{background:black;}
+body.webgl #webgl,#nongl{display:block;}
+body.webgl #nongl,#webgl{display:none;}
+div.button{
+  background-image: url(button.png);
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:20vw;
+  width:50vw;
+  height:20vw;
+  border-radius:9%/21%;
+  background-size: 102.4%;
+  background-position:50% 50%;
+  overflow:hidden;
+}
+div.button div{
+  position:absolute;
+  width:50vw;
+  height:20vw;
+  border-radius:9%/21%;
+  opacity:0.25;
+  background:-webkit-linear-gradient(transparent, blue);
+  background:-moz-linear-gradient(transparent, blue);
+  background:-o-linear-gradient(transparent, blue);
+  background:linear-gradient(transparent, blue);
+}
+div.button div:hover{
+  opacity:0.5;
+}
+div.button div:active{
+  opacity:0.75;
+  background:black;
+}
+canvas{
+  background:red;
+  position:fixed;
+  left:0;top:0;
+}
+</style>
+<div id='nongl'>
+  <div class="button"><div></div></div>
+</div>
+<div id='webgl'>
+<canvas id='webglcanvas'></canvas>
+</div>
