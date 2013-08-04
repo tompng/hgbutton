@@ -59,6 +59,7 @@ function buttonOut(){
 function buttonClicked(){
   if(window.onButtonClick)onButtonClick();
   clickEffect.dest=1;
+  overEffect.value=1;
   if(!renderFlag)_render(true);
 }
 
