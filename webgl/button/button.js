@@ -74,7 +74,7 @@ function _render(flag){
     overEffect.value+=dt;
     if(overEffect.value>1)overEffect.value=1;
   }else{
-    overEffect.value-=dt;
+    overEffect.value-=dt/2;
     if(overEffect.value<0)overEffect.value=0;
   }
   var e1=Math.exp(-8*dt);
@@ -129,12 +129,14 @@ function render(time,ovalue,cvalue){
     t=2*Math.PI*t;
     return Math.min(1,Math.max(0.2,0.5+0.8*Math.cos(t)));
   }
-  light.use({
-    time: time,
-    texture: wave,
-    rgb: [col(0.1*time),col(0.1*time+1/3),col(0.1*time+2/3)],
-    phase: cvalue
-  }).render(lgeom);
+  if(cvalue){
+    light.use({
+      time: time,
+      texture: wave,
+      rgb: [col(0.1*time),col(0.1*time+1/3),col(0.1*time+2/3)],
+      phase: cvalue
+    }).render(lgeom);
+  }
   GL.blendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE);
   shader.use({
     time: time,
