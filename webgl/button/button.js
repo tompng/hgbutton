@@ -28,7 +28,7 @@ function start(){
     buttonClicked();
     if(!state)stateChange(true);
   }
-  canvas.onmouseout=function(){if(state)stateChange(false);}
+  document.onmouseout=window.onblur=function(){if(state)stateChange(false);}
   GL=canvas.getContext("experimental-webgl");
   if(!GL)return;
   document.body.className="webgl";
