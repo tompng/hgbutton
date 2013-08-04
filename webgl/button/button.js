@@ -16,8 +16,14 @@ function start(){
   }
   function stateChange(flag){
     state=flag;
-    if(state)buttonOver();
-    else buttonOut();
+    if(state){
+      buttonOver();
+      document.body.style.cursor="pointer"
+    }
+    else{
+      document.body.style.cursor=""
+      buttonOut();
+    }
   }
   canvas.onmousemove=function(e){
     var s2=check(e);
