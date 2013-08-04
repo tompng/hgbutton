@@ -3,7 +3,18 @@
 <script src="../lib/glutil.js"></script>
 <script src="../lib/shader.js"></script>
 <script src="button.js" charset="utf-8"></script>
-<script>onload=start</script>
+<script>
+//connect to websocket
+onload=function(){
+  start();
+  //connect to websocket
+}
+function onButtonClick(){
+  console.log('clicked');
+  //send event
+}
+
+</script>
 <style>
 body{background:black;}
 body.webgl #webgl,#nongl{display:block;}
@@ -45,7 +56,7 @@ canvas{
 }
 </style>
 <div id='nongl'>
-  <div class="button"><div></div></div>
+  <div class="button" onclick="if(window.onButtonClick)onButtonClick();"><div></div></div>
 </div>
 <div id='webgl'>
 <canvas id='webglcanvas'></canvas>

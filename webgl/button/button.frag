@@ -1,21 +1,22 @@
 precision mediump float;
 varying vec2 texcoord;
-uniform sampler2D texture,wave;
-uniform float alpha;
-uniform float phase;
-uniform float time;
+uniform float phase,time,active;
+uniform sampler2D texture,wave,text;
 void main(void){
-  vec4 data = texture2D(texture,texcoord);
-  if(data.g==0.)discard;
-  float border = data.b;
-  float text = data.r;
-  vec2 wc1 = texcoord*2.+vec2(1,0.)*time;
-  vec2 wc2 = texcoord*2.+vec2(-1,0.)*time;
-  vec4 color = texture2D(wave,wc1*vec2(0.1,0.8))+
-               texture2D(wave,wc2*vec2(0.1,0.8));
-	gl_FragColor=vec4(
-  vec3(1,1,1)*(1.-text)+
-  (vec3(0.1,0.3,0.5)+color.rgb*vec3(0.2,0.4,0.6))*text,
-  data.g*alpha
-  );
+  vec3 color=texture2D(text,texcoord).rgb;
+  vec2 geom=texture2D(texture,texcoord).rg;
+  vec3 w1=texture2D(wave,texcoord*0.2-0.2*vec2(0.1,0.2)*time
+    +0.2*vec2(0.6,0.4)*time*active
+  ).rgb;
+  vec3 w2=texture2D(wave,texcoord*0.2+0.2*vec2(0.2,0.1)*time
+    -0.2*vec2(0.6,0.4)*time*active
+  ).rgb;
+  vec3 hoge=(
+  texture2D(text,texcoord+geom.g*(w1-w2).rg*0.1).rgb
+  +texture2D(text,texcoord+geom.g*(w1.gb-w2.br).rg*0.1).rgb
+  )*(w1+w2)/1.5;
+
+  vec3 rgb=vec3(0.67,0.67,0.87)+color.b*vec3(0.33,0.33,0.23);
+  rgb=color*(1.-phase)+phase*hoge;
+  gl_FragColor=vec4(rgb,geom.r*(1.-phase)+phase*geom.g*(2.-geom.g));
 }
