@@ -6,10 +6,10 @@ void main(void){
   vec3 color=texture2D(text,texcoord).rgb;
   vec2 geom=texture2D(texture,texcoord).rg;
   vec3 w1=texture2D(wave,texcoord*0.2-0.2*vec2(0.1,0.2)*time
-    +0.2*vec2(0.6,0.4)*time*active
+    +0.2*vec2(1,1)*sin(8.*time)*active
   ).rgb;
   vec3 w2=texture2D(wave,texcoord*0.2+0.2*vec2(0.2,0.1)*time
-    -0.2*vec2(0.6,0.4)*time*active
+    -0.2*vec2(1,1)*sin(12.*time)*active
   ).rgb;
   vec3 hoge=(
   texture2D(text,texcoord+geom.g*(w1-w2).rg*0.1).rgb
