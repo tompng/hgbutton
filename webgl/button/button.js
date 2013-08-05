@@ -149,7 +149,7 @@ function render(time,ovalue,cvalue){
   shader.use({
     time: time,
     wave: wave,
-    phase: 0.8*ovalue,
+    phase: ovalue,
     active: cvalue,
     texture: texture,
     text: text,

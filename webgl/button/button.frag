@@ -5,7 +5,7 @@ uniform sampler2D texture,wave,text;
 uniform vec2 mouse;
 void main(void){
   vec2 geom=texture2D(texture,texcoord).rg;
-  vec2 dd=0.1*geom.g*mouse*phase*vec2(1,4);
+  vec2 dd=-0.1*geom.g*mouse*phase*vec2(1,4);
   vec3 color=texture2D(text,texcoord+dd).rgb;
   vec3 w1=texture2D(wave,texcoord*0.2-0.2*vec2(0.1,0.2)*time
     +0.2*vec2(1,1)*sin(8.*time)*active+dd
