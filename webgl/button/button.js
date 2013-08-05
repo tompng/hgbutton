@@ -153,7 +153,7 @@ function render(time,ovalue,cvalue){
     active: cvalue,
     texture: texture,
     text: text,
-    mouse: [mouseX,mouseY],
+    mouse: [Math.max(Math.min(1,mouseX),-1),Math.max(Math.min(0.25,mouseY),-0.25)],
     rect:[-0.5*1.024,-0.25*1.024,1.024,0.5*1.024]
   }).render(quad);
 }
