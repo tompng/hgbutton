@@ -1,4 +1,5 @@
 var GL,FB;
+var mouseX=0,mouseY=0;
 function start(){
   var flag=false;
   var canvas=document.getElementById("webglcanvas");
@@ -8,6 +9,7 @@ function start(){
     var x=(e.pageX-canvas.width/2)/(w/4);
     var y=(e.pageY-canvas.height/2)/(w/4);
     var r=160/1000,h=400/1000;
+    mouseX=x;mouseY=y;
     if(-1<x&&x<1&&-h+r<y&&y<h-r)return true;
     if(-1+r<x&&x<1-r&&-h<y&&y<h)return true;
     if(x<0)x+=1-r;if(0<x)x-=1-r;
@@ -151,6 +153,7 @@ function render(time,ovalue,cvalue){
     active: cvalue,
     texture: texture,
     text: text,
+    mouse: [mouseX,mouseY],
     rect:[-0.5*1.024,-0.25*1.024,1.024,0.5*1.024]
   }).render(quad);
 }
