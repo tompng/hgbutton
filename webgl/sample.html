@@ -48,6 +48,7 @@ function initGL(){
 }
 
 
+
 function renderBackground(){
   cliff.render(TARGET);
   lifegame.render(TARGET, COUNT);
@@ -77,6 +78,17 @@ function addBigEffect(effect){
 }
 
 
+function DelayEffect(effect, delay){
+  this.time0=new Date();
+  this.delay=delay;
+  this.effect=effect;
+  effect.time0=this.time0.getTime()+delay;
+}
+DelayEffect.prototype.render=function(target){
+  var msec=(new Date()-this.time0);
+  if(msec<this.delay)return true;
+  return this.effect.render(target);
+}
 
 
 function genBigEffect(){
@@ -84,16 +96,22 @@ function genBigEffect(){
   var constructor = constructors[Math.floor(constructors.length*Math.random())];
   return new constructor();
 }
+var bigSound;
 onload=function(){
   initGL();
   AriaEffect.load('aftereffect/aria/');
   SugokuEffect.load('aftereffect/sugokuiine/');
+  SquareEffect.load('aftereffect/square/');
+  bigSound=document.createElement("video");//new Audio();
+  bigSound.src="sounds/iyopon.mp3";
 
   document.onclick=function(e){
     if(e.pageX<innerWidth/2){
-      addEffect(Math.floor(2*Math.random()));
+      addEffect(1+Math.floor(2*Math.random()));
     }else{
-      addBigEffect(genBigEffect());
+      addBigEffect(new DelayEffect(new SquareEffect(7000),300));
+      addBigEffect(new DelayEffect(genBigEffect(),3100));
+      bigSound.play();
     }
   }
 }

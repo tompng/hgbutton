@@ -1,6 +1,6 @@
 function AriaEffect(duration){
   this.time0 = new Date();
-  this.duration = duration || 3000;
+  this.duration = duration || 1500;
 }
 
 AriaEffect.prototype.render=function(target){

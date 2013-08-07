@@ -1,5 +1,5 @@
 function SugokuEffect(duration){
-  this.duration = duration || 2000;
+  this.duration = duration || 1500;
   this.time0 = new Date();
 }
 SugokuEffect.prototype.render=function(target){
@@ -38,7 +38,7 @@ SugokuEffect.render = function(target,time){
     this.shader.use({
       texture: this.textures[i],
       rect:    [0.01*Math.sin((13.2-i)*time)+(i-2.5)/4-size/2, -0.5+0.01*Math.sin((11.3+1.3*i)*time), size, size],
-      color: [0,0,0,(1-Math.cos(2*Math.PI*time))/2],
+      color: [0,0,0,time*(1-time)*(1-time)*(1-time)*10],
     }).render(this.quad);
   }
   return true;
