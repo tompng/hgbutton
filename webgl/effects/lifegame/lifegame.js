@@ -69,6 +69,8 @@ LifeGame.prototype.render = function(outputTarget, count){
     }
   }
 
+
+  GL.blendFunc(GL.ONE,GL.ONE);
   GL.framebuffer.setRenderTarget(outputTarget);
   this.renderShader.use({
     texture: this.newTarget.texture,

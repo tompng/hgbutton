@@ -39,19 +39,23 @@ onload=function(){
   var effect3 = new SquareEffect('aftereffect/square/');
   var effect4 = new SugokuEffect('aftereffect/sugokuiine/');
   var effect5 = new AriaEffect('aftereffect/aria/');
+  var effectL = new LifeGame('effects/lifegame/');
   effect1.render(renderTarget,1);
   effect2.render(renderTarget,1);
   var t=new Date();
   setInterval(function(){
     GL.clear(GL.COLOR_BUFFER_BIT);
     GL.blendFunc(GL.ONE,GL.ZERO);
+
     if(flag&&(new Date()-1000/10>t)){
       effect1.render(renderTarget,1);
+      effectL.render(renderTarget,1)
       effect2.render(renderTarget,1);
       flag=false;
       t=new Date();
     }else{
       effect1.render(renderTarget,0);
+      effectL.render(renderTarget,0)
       effect2.render(renderTarget,0);
     }
     // effect3.render(renderTarget);
