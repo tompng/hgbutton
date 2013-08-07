@@ -61,17 +61,18 @@ CliffEffect.prototype.render = function(outputTarget){
   GL.enable(GL.DEPTH_TEST);
   var lx,ly,lz;
   var time=(new Date()-this.time0)/1000;
-  lx=0.5*(
-    Math.sin(1.1*time)+
-    Math.sin(1.3*time)+
-    Math.sin(1.5*time)+
-    Math.sin(1.7*time)+
-    Math.sin(1.9*time)+
-    Math.sin(2.3*time));
-  ly=0.5*(1+
-    Math.sin(1.2*time)+
-    Math.sin(1.7*time)+
-    Math.sin(2.1*time));
+  var tscale=0.2;
+  lx=
+    Math.sin(1.1*tscale*time)+
+    Math.sin(1.3*tscale*time)+
+    Math.sin(1.5*tscale*time)+
+    Math.sin(1.7*tscale*time)+
+    Math.sin(1.9*tscale*time)+
+    Math.sin(2.3*tscale*time);
+  ly=1+
+    Math.sin(1.2*tscale*time)+
+    Math.sin(1.7*tscale*time)+
+    Math.sin(2.1*tscale*time);
   lz=1;
   var lr=Math.sqrt(lx*lx+ly*ly+lz*lz);
   for(var i=-1;i<=1;i++){

@@ -15,7 +15,7 @@ var LifeGame = function(url){
   this.newTarget = this.createRenderTarget();
   var quadVertex = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
   this.quad      = new Geometry(GL.TRIANGLE_FAN, 4, { vertex: quadVertex });
-  this.a         = 0;
+  this.opacity = 1;
   this.list = [];
 }
 
@@ -32,7 +32,10 @@ LifeGame.prototype.flipRenderTarget = function() {
 
 LifeGame.prototype.render = function(outputTarget, count){
   GL.blendFunc(GL.ONE,GL.ZERO);
-  
+  if(count)this.opacity=1;
+  this.opacity*=0.998;
+  if(this.opacity<1/255)return;
+
   for(var i=0;i<count;i++){
     var size=1+Math.random();
     this.list.push({
@@ -74,6 +77,7 @@ LifeGame.prototype.render = function(outputTarget, count){
   GL.framebuffer.setRenderTarget(outputTarget);
   this.renderShader.use({
     texture: this.newTarget.texture,
+    opacity: this.opacity*0.5
   }).render(this.quad);
 
   GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
