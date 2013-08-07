@@ -45,5 +45,4 @@ SquareEffect.render = function(target,time){
     var alpha=0.8+(1+Math.sin(987*ix+654*iy+321))*1000%1*0.2;
     this.rect(2*ix/n-1,2*iy/n-1,2/n,2/n,alpha*a*a*(3-2*a));
   }
-  console.log(time);
 }
