@@ -35,7 +35,6 @@ function initGL(){
   cliff = new CliffEffect('effects/cliff/');
   blur = new BlurEffect('effects/blur/');
   lifegame = new LifeGame('effects/lifegame/');
-  AriaEffect.load('aftereffect/aria/');
   window.onresize();
   function timing(){
     var time1=new Date();
@@ -80,14 +79,21 @@ function addBigEffect(effect){
 
 
 
-
+function genBigEffect(){
+  var constructors = [AriaEffect, SugokuEffect];
+  var constructor = constructors[Math.floor(constructors.length*Math.random())];
+  return new constructor();
+}
 onload=function(){
   initGL();
+  AriaEffect.load('aftereffect/aria/');
+  SugokuEffect.load('aftereffect/sugokuiine/');
+
   document.onclick=function(e){
     if(e.pageX<innerWidth/2){
       addEffect(Math.floor(2*Math.random()));
     }else{
-      addBigEffect(new AriaEffect());
+      addBigEffect(genBigEffect());
     }
   }
 }

@@ -31,7 +31,6 @@ CliffEffect.prototype.createGeometry = function(img){
     y=(y%img.height+img.height)%img.height;
     return data.get(x,y).r/10*2;
   }
-  console.log(W,H);
   for(var iy=0;iy<H;iy+=2){
     for(var ix=0;ix<=W;ix++){
       texcoord.push(ix/W,(H-iy-1)/H);
