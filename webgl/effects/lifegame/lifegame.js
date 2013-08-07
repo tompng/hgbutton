@@ -15,7 +15,8 @@ var LifeGame = function(url){
   this.newTarget = this.createRenderTarget();
   var quadVertex = new ArrayBufferObject(2, [-1, -1, 1, -1, 1, 1, -1, 1]);
   this.quad      = new Geometry(GL.TRIANGLE_FAN, 4, { vertex: quadVertex });
-  this.opacity = 1;
+  this.opacity=1;
+  this.smoothOpacity=1;
   this.list = [];
 }
 
@@ -33,9 +34,18 @@ LifeGame.prototype.flipRenderTarget = function() {
 LifeGame.prototype.render = function(outputTarget, count){
   GL.blendFunc(GL.ONE,GL.ZERO);
   if(count)this.opacity=1;
-  this.opacity*=0.998;
-  if(this.opacity<1/255)return;
-
+  this.opacity*=0.996;
+  this.smoothOpacity=this.smoothOpacity*0.96+this.opacity*0.04;
+  if(this.opacity==0)return;
+  if(this.opacity<1/255){
+    GL.clearColor(0,0,0,0);
+    GL.framebuffer.setRenderTarget(this.newTarget);
+    GL.clear(GL.COLOR_BUFFER_BIT);
+    GL.framebuffer.setRenderTarget(this.oldTarget);
+    GL.clear(GL.COLOR_BUFFER_BIT);
+    this.opacity=0;
+    return;
+  }
   for(var i=0;i<count;i++){
     var size=1+Math.random();
     this.list.push({
@@ -77,7 +87,7 @@ LifeGame.prototype.render = function(outputTarget, count){
   GL.framebuffer.setRenderTarget(outputTarget);
   this.renderShader.use({
     texture: this.newTarget.texture,
-    opacity: this.opacity*0.5
+    opacity: this.smoothOpacity*0.5
   }).render(this.quad);
 
   GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
