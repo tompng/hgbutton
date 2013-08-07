@@ -4,7 +4,7 @@ uniform sampler2D texture;
 uniform float rand;
 void main(void){
   vec4 color = texture2D(texture,texcoord);
-  if(color.a*color.r < 0.5)discard;
+  if(color.r < 0.5)discard;
   vec2 p=4.*texcoord;
   float val = sin(1234.*sin(
     (9987.+1923.*rand)*texcoord.x

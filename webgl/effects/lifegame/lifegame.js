@@ -7,9 +7,9 @@ var LifeGame = function(url){
   this.messageShader = new ShaderObject({ vert: url+'image.vert',  frag: url+'image.frag' });
   this.noiseShader = new ShaderObject({ vert: url+'image.vert',  frag: url+'noise.frag' });
   this.textures = [
-    new TextureObject({ image: createCharImage('は', 128) }),
-    new TextureObject({ image: createCharImage('ご', 128) }),
-    new TextureObject({ image: createCharImage('ー', 128) })
+    new TextureObject({ image:'image/round/ha.png'}),
+    new TextureObject({ image:'image/round/go.png'}),
+    new TextureObject({ image:'image/round/o.png'})
   ];
   this.oldTarget = this.createRenderTarget();
   this.newTarget = this.createRenderTarget();
